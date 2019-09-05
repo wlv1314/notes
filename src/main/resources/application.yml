@@ -1,0 +1,25 @@
+
+server:
+  port: 8083
+  servlet:
+    context-path: /notes
+spring:
+  mvc:
+    view:
+      prefix: classpath:/templates/
+      suffix: .html
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/static/
+  datasource:
+    url: jdbc:mysql://localhost:3306/notes?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+
+#配置mybatis框架
+mybatis:
+  #定义Mapper接口映射文件位置
+  mapper-locations: classpath:mapper/*.xml
+  #定义实体类位置
+  type-aliases-package: com.blog.notes.entity

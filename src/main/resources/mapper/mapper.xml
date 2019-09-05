@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.notes.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.blog.notes.entity.User">
+        <result column="userId" property="userId" />
+        <result column="userName" property="userName" />
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+    </resultMap>
+    <parameterMap id="User" type="com.blog.notes.entity.User"/>
+    <sql id="Base_Column_List">
+        userId, userName,password,email
+    </sql>
+
+    <insert id="addUser" parameterType="com.blog.notes.entity.User">
+      insert into
+        notes_user (userName,password,email)
+      values (#{userName},#{password},#{email})
+    </insert>
+
+    <select id="findUserByUserName" resultType="com.blog.notes.entity.User">
+        select * from notes_user where userName=#{userName}
+    </select>
+
+
+</mapper>
