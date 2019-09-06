@@ -4,7 +4,9 @@
 </head>
 <body>
 <div class="row">
-    <div class="col-md-1"><span id="userStatus" style="display: none;" th:text="${currUser.userName}"></span></div>
+    <div class="col-md-1">
+        <span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span>
+    </div>
     <div class="col-md-10">
         <div th:replace="common/head :: head_nav"></div>
         <div id="slidershow" class="carousel slide" data-ride="carousel">
@@ -54,19 +56,5 @@
     <div class="col-md-1"></div>
 </div>
 </body>
-<script>
-    $(document).ready(function () {
-        var user=$("#userStatus").html();
-        if(user!=null){
-            $("#lilogin").html("<li class=\"dropdown\">\n" +
-                "                    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\"><span>您好:["+user+"]</span><span class=\"caret\"></span></a>\n" +
-                "                    <ul class=\"dropdown-menu\">\n" +
-                "                        <li><a href=\"#\">个人信息</a></li>\n" +
-                "                        <li><a href=\"#\">退出登录</a></li>\n" +
-                "                    </ul>\n" +
-                "                </li>");
-            $("#liregister").html("");
-        }
-    })
-</script>
+
 </html>

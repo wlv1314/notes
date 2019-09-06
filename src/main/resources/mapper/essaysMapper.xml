@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.notes.dao.EssaysDao">
+    <resultMap id="BaseResultMap" type="com.blog.notes.entity.Essays">
+        <result column="essaysId" property="essaysId" />
+        <result column="userId" property="userId" />
+        <result column="essaysTitle" property="essaysTitle"/>
+        <result column="essaysContent" property="essaysContent"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+    <parameterMap id="Essays" type="com.blog.notes.entity.Essays"/>
+    <sql id="Base_Column_List">
+        essaysId,userId, essaysTitle,essaysContent,createTime
+    </sql>
+
+    <insert id="addEssays" parameterType="com.blog.notes.entity.Essays">
+      insert into
+        notes_essays (userId, essaysTitle,essaysContent,createTime)
+      values (#{userId},#{essaysTitle},#{essaysContent},#{createTime})
+    </insert>
+
+    <select id="findAllEssays" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays where userId=#{userId} limit 10;
+    </select>
+
+
+
+</mapper>

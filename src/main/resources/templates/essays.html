@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/common :: common_head('myNotes')">
+</head>
+<body>
+<div class="row">
+    <div class="col-md-1"><span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span></div>
+    <div class="col-md-10">
+        <div th:replace="common/head :: head_nav"></div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="media">
+                    <div class="media-left">我的随笔(前10篇)</div>
+                    <ul style="margin: 5px;" class="list-group" th:each="essays,essaysStat : ${allEssays}">
+                        <li class="list-group-item" th:text="${essays.essaysTitle}"><span class="badge">14</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <form id="addEssaysForm" role="form">
+                    <div class="media">
+                        <div class="media-body">
+                            <input style="display: none;" type="text" name="userId" th:value="${currUser.userId}">
+                            <div class="page-header">
+                                <div class="form-group">
+                                    <label for="essaysTitle">标题</label>
+                                    <input type="text" class="form-control" name="essaysTitle" id="essaysTitle" placeholder="请输入标题">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>随笔</label>
+                                <textarea class="form-control" name="essaysContent" rows="15" style="resize: none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="addEsayssBtn" class="btn btn-default">提交</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="col-md-1"></div>
+</div>
+</body>
+<script>
+$("#addEsayssBtn").click(function () {
+    $.ajax({
+        async:"true",
+        type:"POST",
+        dataType:"json",
+        url:"addessays",
+        data: $('#addEssaysForm').serialize(),
+        success: function (data) {
+            console.log(data);//打印服务端返回的数据(调试用)
+            alert(data.msg);
+
+        },
+        error : function(result) {
+            alert("系统异常！"+result);
+        }
+    });
+});
+
+</script>
+</html>
