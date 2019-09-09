@@ -75,7 +75,7 @@ public class EssaysController {
 
             int offset = (currPage - 1) * pageSize;// 计算sql需要的起始索引
             List<Essays> list = essaysService.findAllEssays(currUser.getUserId(),offset, pageSize);// 根据起始索引和页面大小去查询数据
-            System.out.println("list:"+list.size()+"  ---  "+list.toString());
+            System.out.println("list:"+list.size()+"  ---  ");
 
             // 封装数据，并返回
             map.put("page", currPage);
@@ -90,5 +90,15 @@ public class EssaysController {
             return new ResponseEntity<Map<String, Object>>(
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping("show/{essaysId}")
+    public String showEssays(@PathVariable int essaysId,HttpServletRequest request){
+        User currUser = (User)request.getSession().getAttribute("currUser");
+        System.out.println(currUser.toString()+"===============");
+        Essays essaysById = essaysService.findEssaysById(essaysId);
+        request.setAttribute("currUser",currUser);
+        request.setAttribute("essays",essaysById);
+        return "showEssays";
     }
 }

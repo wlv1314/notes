@@ -38,4 +38,9 @@ public class EssaysServiceImpl implements EssaysService {
     public int count(int userId) {
         return essaysDao.count(userId);
     }
+
+    @Override
+    public Essays findEssaysById(int essaysId) {
+        return essaysDao.findEssaysById(essaysId);
+    }
 }

@@ -15,4 +15,5 @@ public interface EssaysService {
     List<Essays> findAllEssaysLimit(int userId);
     List<Essays> findAllEssays(int userId,int offSet,int pageSize);
     int count(int userId);
+    Essays findEssaysById(int essaysId);
 }
