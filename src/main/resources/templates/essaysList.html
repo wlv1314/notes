@@ -40,7 +40,6 @@
                         totalPages: data.totalPage, //总页数
                         numberOfPages: data.pageSize,//每页记录数
                         itemTexts: function (type, page, current) {//设置分页按钮显示字体样式
-                            alert("itemTexts type:"+type);
                             switch (type) {
                                 case "first":
                                     return "首页";
@@ -55,7 +54,6 @@
                             }
                         },
                         onPageClicked: function (event, originalEvent, type, page) {//分页按钮点击事件
-                            alert("onPageClicked page:"+page);
                             $.ajax({//根据page去后台加载数据
                                 url: "essaysList",
                                 type: "get",
@@ -75,13 +73,13 @@
         function appendHtml(list) {//此函数用于处理后台返回的数据，根据自己需求来实现页面拼接
             var tableShow = '';
             for (var i = 0; i < list.length; i++) {
-                tableShow += '<a href="news/' + list[i].essaysId + '">';
+                tableShow += '<a href="show/' + list[i].essaysId + '">';
                 tableShow += '<li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" style="border-top: 0px">';
                 tableShow += '<div class="am-u-sm-4 am-list-thumb">';
                 /*tableShow += '<img src="' + list[i].newsUrl + '"/>';*/
                 tableShow += '</div><div class=" am-u-sm-7 am-list-main">';
                 tableShow += '<h3 class="am-list-item-hd">' + list[i].essaysTitle + '</h3>';
-                tableShow += '</div></li><div class="newsico am-fr">';
+                tableShow += '</div></li><div class="newsico am-fr"  style="width:auto;text-overflow:ellipsis; white-space:nowrap; overflow:hidden;">';
                 tableShow += '<i class="am-icon-clock-o  am-hide-sm-only">' + list[i].essaysContent + '</i></div></a>';
             }
             $('#htmlDiv').html(tableShow)

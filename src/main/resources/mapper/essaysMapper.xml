@@ -33,6 +33,9 @@
         SELECT count(*) FROM notes_essays where userId=#{userId}
     </select>
 
+    <select id="findEssaysById" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays where essaysId=#{essaysId};
+    </select>
 
 
 </mapper>
