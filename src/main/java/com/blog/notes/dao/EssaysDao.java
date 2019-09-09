@@ -2,6 +2,7 @@ package com.blog.notes.dao;
 
 import com.blog.notes.entity.Essays;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,5 +15,7 @@ import java.util.List;
 @Mapper
 public interface EssaysDao {
     int addEssays(Essays essays);
-    List<Essays> findAllEssays(int userId);
+    List<Essays> findAllEssaysLimit(int userId);
+    List<Essays> findAllEssays(@Param("userId") int userId,@Param("offSet") int offSet,@Param("pageSize") int pageSize);
+    int count(int userId);
 }

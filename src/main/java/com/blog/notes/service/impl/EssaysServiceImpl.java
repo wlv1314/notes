@@ -25,7 +25,17 @@ public class EssaysServiceImpl implements EssaysService {
     }
 
     @Override
-    public List<Essays> findAllEssays(int userId) {
-        return essaysDao.findAllEssays(userId);
+    public List<Essays> findAllEssaysLimit(int userId) {
+        return essaysDao.findAllEssaysLimit(userId);
+    }
+
+    @Override
+    public List<Essays> findAllEssays(int userId,int offSet,int pageSize) {
+        return essaysDao.findAllEssays(userId,offSet,pageSize);
+    }
+
+    @Override
+    public int count(int userId) {
+        return essaysDao.count(userId);
     }
 }

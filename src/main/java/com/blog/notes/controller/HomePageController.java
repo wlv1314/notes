@@ -74,12 +74,22 @@ public class HomePageController {
         }else{
             request.setAttribute("currUser", loginUser);
             User user=(User)loginUser;
-            List<Essays> allEssays = essaysService.findAllEssays(user.getUserId());
+            List<Essays> allEssays = essaysService.findAllEssaysLimit(user.getUserId());
             request.setAttribute("allEssays", allEssays);
             System.out.println("随笔");
             return "essays";
         }
     }
-
+    @RequestMapping("myEssays")
+    public String myEssays(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("redirect:essaysList-----");
+        Object loginUser = request.getSession().getAttribute("currUser");
+        if(loginUser==null){
+            return "redirect:index";
+        }else{
+            request.setAttribute("currUser", loginUser);
+            return "essaysList";
+        }
+    }
 
 }

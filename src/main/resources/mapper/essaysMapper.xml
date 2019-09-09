@@ -19,8 +19,18 @@
       values (#{userId},#{essaysTitle},#{essaysContent},#{createTime})
     </insert>
 
-    <select id="findAllEssays" resultType="com.blog.notes.entity.Essays">
+    <select id="findAllEssaysLimit" resultType="com.blog.notes.entity.Essays">
         select * from notes_essays where userId=#{userId} limit 10;
+    </select>
+
+    <!-- 查询分页数据 -->
+    <select id="findAllEssays" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays where userId=#{userId} limit #{offSet},#{pageSize};
+    </select>
+
+    <!-- 查询总记录数 -->
+    <select id="count" resultType="int">
+        SELECT count(*) FROM notes_essays where userId=#{userId}
     </select>
 
 

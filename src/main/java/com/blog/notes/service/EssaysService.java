@@ -12,5 +12,7 @@ import java.util.List;
  **/
 public interface EssaysService {
     int addEssays(Essays essays);
-    List<Essays> findAllEssays(int userId);
+    List<Essays> findAllEssaysLimit(int userId);
+    List<Essays> findAllEssays(int userId,int offSet,int pageSize);
+    int count(int userId);
 }
