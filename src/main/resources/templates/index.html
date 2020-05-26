@@ -6,6 +6,7 @@
 <div class="row">
     <div class="col-md-1">
         <span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span>
+        <span id="loginStatus" style="display: none;" th:text="${loginStatus}"></span>
     </div>
     <div class="col-md-10">
         <div th:replace="common/head :: head_nav"></div>
@@ -56,5 +57,12 @@
     <div class="col-md-1"></div>
 </div>
 </body>
-
+<script>
+    $(function () {
+        var val = $("#loginStatus").text();
+        if(val == "false"){
+            alert("请先登录!")
+        }
+    });
+</script>
 </html>

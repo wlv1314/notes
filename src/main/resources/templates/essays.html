@@ -55,6 +55,7 @@ $("#addEsayssBtn").click(function () {
         success: function (data) {
             console.log(data);//打印服务端返回的数据(调试用)
             alert(data.msg);
+            window.location.reload()
 
         },
         error : function(result) {

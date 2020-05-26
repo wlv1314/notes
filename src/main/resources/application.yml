@@ -3,6 +3,8 @@ server:
   port: 8083
   servlet:
     context-path: /notes
+  max-http-header-size: 1024000
+
 spring:
   mvc:
     view:

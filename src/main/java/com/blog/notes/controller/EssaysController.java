@@ -47,7 +47,7 @@ public class EssaysController {
         return map;
     }
 
-    @GetMapping("essaysList")
+    @PostMapping("essaysList")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> news(@RequestParam("currPage")int currPage, HttpServletRequest request) {
         System.out.println("currPage:"+currPage);
@@ -91,4 +91,44 @@ public class EssaysController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("news/{essaysId}/{currPage}")
+    @ResponseBody
+    public ModelAndView findEssaysContentByEssaysId(@PathVariable int essaysId,@PathVariable int currPage, ModelAndView modelAndView,HttpServletRequest request){
+        System.out.println("文章id"+essaysId);
+        Object loginUser = request.getSession().getAttribute("currUser");
+        System.out.println("文章"+loginUser);
+        Essays essaysByEssaysId = essaysService.findEssaysByEssaysId(essaysId);
+        modelAndView.setViewName("showessays");
+        modelAndView.addObject("ebei", essaysByEssaysId);
+        modelAndView.addObject("currUser", loginUser);
+        modelAndView.addObject("currPage", currPage);
+        System.out.println("文章"+essaysByEssaysId);
+        System.out.println("当前对象"+loginUser);
+        request.setAttribute("currUser", loginUser);
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("ebei", essaysByEssaysId);
+//        map.put("currUser", loginUser);
+        return modelAndView;
+    }
+
+    @PostMapping("deleteEssaysById/{essaysId}")
+    @ResponseBody
+    public String deleteEssaysContentByEssaysId(@PathVariable int essaysId, ModelAndView modelAndView,HttpServletRequest request){
+        System.out.println("删除文章id"+essaysId);
+        Object loginUser = request.getSession().getAttribute("currUser");
+        if(loginUser==null){
+            modelAndView.addObject("msg", "login please!!!");
+            return "redirect:index";
+        }
+        System.out.println("删除文章"+loginUser);
+        essaysService.deleteEssaysByEssaysId(essaysId);
+        modelAndView.setViewName("showessays");
+        modelAndView.addObject("currUser", loginUser);
+        System.out.println("当前对象删除"+loginUser);
+        request.setAttribute("currUser", loginUser);
+        return "redirect:myEssays";
+    }
+
+
 }

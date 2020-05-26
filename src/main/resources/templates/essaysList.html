@@ -20,19 +20,16 @@
 </body>
 <script>
     $(function() {
-        alert("开始分页")
-
         pageStart();//开始分页
-
         function pageStart() {//分页函数
             $.ajax({ //去后台查询第一页数据
-                type: "get",
+                type: "post",
                 url: "essaysList",
                 dataType: "json",
                 data: {"currPage":1}, //参数：当前页为1
                 success: function (data) {
 
-                    appendHtml(data.list)//处理第一页的数据
+                    appendHtml(data.list,data.page)//处理第一页的数据
 
                     var options = {//根据后台返回的分页相关信息，设置插件参数
                         bootstrapMajorVersion: 3, //如果是bootstrap3版本需要加此标识，并且设置包含分页内容的DOM元素为UL,如果是bootstrap2版本，则DOM包含元素是DIV
@@ -40,7 +37,7 @@
                         totalPages: data.totalPage, //总页数
                         numberOfPages: data.pageSize,//每页记录数
                         itemTexts: function (type, page, current) {//设置分页按钮显示字体样式
-                            alert("itemTexts type:"+type);
+                            // alert("itemTexts type:"+type);
                             switch (type) {
                                 case "first":
                                     return "首页";
@@ -55,14 +52,14 @@
                             }
                         },
                         onPageClicked: function (event, originalEvent, type, page) {//分页按钮点击事件
-                            alert("onPageClicked page:"+page);
+                            // alert("onPageClicked page:"+page);
                             $.ajax({//根据page去后台加载数据
                                 url: "essaysList",
-                                type: "get",
+                                type: "post",
                                 dataType: "json",
                                 data: {"currPage": page},
                                 success: function (data) {
-                                    appendHtml(data.list);//处理数据
+                                    appendHtml(data.list,data.page);//处理数据
                                 }
                             });
                         }
@@ -72,17 +69,17 @@
             });
         }
 
-        function appendHtml(list) {//此函数用于处理后台返回的数据，根据自己需求来实现页面拼接
+        function appendHtml(list,currPage) {//此函数用于处理后台返回的数据，根据自己需求来实现页面拼接
             var tableShow = '';
             for (var i = 0; i < list.length; i++) {
-                tableShow += '<a href="news/' + list[i].essaysId + '">';
-                tableShow += '<li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" style="border-top: 0px">';
+                tableShow += '<a href="news/' + list[i].essaysId + '/'+currPage+'">';
                 tableShow += '<div class="am-u-sm-4 am-list-thumb">';
                 /*tableShow += '<img src="' + list[i].newsUrl + '"/>';*/
                 tableShow += '</div><div class=" am-u-sm-7 am-list-main">';
                 tableShow += '<h3 class="am-list-item-hd">' + list[i].essaysTitle + '</h3>';
-                tableShow += '</div></li><div class="newsico am-fr">';
-                tableShow += '<i class="am-icon-clock-o  am-hide-sm-only">' + list[i].essaysContent + '</i></div></a>';
+                tableShow += '</div><div class="newsico am-fr">';
+                tableShow += '<i class="am-icon-clock-o  am-hide-sm-only">' + list[i].essaysContent.substring(1,100) + '</i></div></a>';
+                tableShow += '<i>'+list[i].createTime+'</i><hr>';
             }
             $('#htmlDiv').html(tableShow)
         }

@@ -18,4 +18,7 @@ public interface EssaysDao {
     List<Essays> findAllEssaysLimit(int userId);
     List<Essays> findAllEssays(@Param("userId") int userId,@Param("offSet") int offSet,@Param("pageSize") int pageSize);
     int count(int userId);
+    Essays findEssaysByEssaysId(int essaysId);
+    void deleteEssaysByEssaysId(int essaysId);
+    List<Essays> findEssaysBySearchName(String searchName);
 }

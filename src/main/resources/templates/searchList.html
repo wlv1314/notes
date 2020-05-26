@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/common :: common_head('myNotes')">
+</head>
+<body>
+<div class="row">
+    <div class="col-md-1"><span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span></div>
+    <div class="col-md-10">
+        <div th:replace="common/head :: head_nav"></div>
+        <table class="table table-hover">
+            <tr>
+                <td>标题</td>
+                <td>内容</td>
+                <td>创建时间</td>
+                <td>操作</td>
+            </tr>
+            <tr th:each="info : ${list}" >
+                <td th:text="${info.essaysTitle}"></td>
+                <td th:switch="${#strings.length(info.essaysContent) gt 80}">
+                    <i th:case="true" th:text="${#strings.substring(info.essaysContent,0,80)}"></i>
+                    <i th:case="false" th:text="${info.essaysContent}"></i>
+                </td>
+                <td th:text="${info.createTime}"></td>
+                <td>
+                    <a th:href="@{'searchInfo/'+${info.essaysId}}">查看</a>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+</body>
+</html>

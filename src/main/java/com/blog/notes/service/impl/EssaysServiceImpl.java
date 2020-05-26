@@ -38,4 +38,23 @@ public class EssaysServiceImpl implements EssaysService {
     public int count(int userId) {
         return essaysDao.count(userId);
     }
+
+    @Override
+    public Essays findEssaysByEssaysId(int essaysId) {
+        return essaysDao.findEssaysByEssaysId(essaysId);
+    }
+
+    @Override
+    public void deleteEssaysByEssaysId(int essaysId) {
+        essaysDao.deleteEssaysByEssaysId(essaysId);
+    }
+
+    @Override
+    public List<Essays> findEssaysBySearchName(String searchName) {
+        List<Essays> essays = essaysDao.findEssaysBySearchName(searchName);
+        if(essays!=null && essays.size()>0){
+            return essays;
+        }
+        return null;
+    }
 }

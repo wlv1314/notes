@@ -5,10 +5,12 @@ import com.blog.notes.entity.Essays;
 import com.blog.notes.entity.User;
 import com.blog.notes.service.EssaysService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +32,10 @@ public class HomePageController {
     private EssaysService essaysService;
 
     @RequestMapping("index")
-    public String toIndex(){
+    public String toIndex(HttpServletRequest request,@ModelAttribute("loginStatus") String loginStatus){
+        Object loginUser = request.getSession().getAttribute("currUser");
+        request.setAttribute("currUser", loginUser);
+        request.setAttribute("loginStatus", loginStatus);
         return "index";
     }
 
@@ -63,12 +68,13 @@ public class HomePageController {
     }
 
     @RequestMapping("essays")
-    public String essays(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String essays(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
         System.out.println("essays");
         Object loginUser = request.getSession().getAttribute("currUser");
         System.out.println(loginUser);
         if(loginUser==null){
             request.setAttribute("isLogin", false);
+            attributes.addFlashAttribute("loginStatus", false);
             System.out.println("重新登录");
             return "redirect:index";
         }else{
@@ -81,10 +87,11 @@ public class HomePageController {
         }
     }
     @RequestMapping("myEssays")
-    public String myEssays(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String myEssays(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
         System.out.println("redirect:essaysList-----");
         Object loginUser = request.getSession().getAttribute("currUser");
         if(loginUser==null){
+            attributes.addFlashAttribute("loginStatus", false);
             return "redirect:index";
         }else{
             request.setAttribute("currUser", loginUser);

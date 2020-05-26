@@ -34,5 +34,17 @@
     </select>
 
 
+    <select id="findEssaysByEssaysId" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays where essaysId=#{essaysId};
+    </select>
+
+    <delete id="deleteEssaysByEssaysId">
+        delete from notes_essays where essaysId=#{essaysId};
+    </delete>
+
+    <!--分页搜索-->
+    <select id="findEssaysBySearchName" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays where essaysTitle like "%"#{searchName}"%"
+    </select>
 
 </mapper>
