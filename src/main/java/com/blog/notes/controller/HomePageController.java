@@ -43,7 +43,6 @@ public class HomePageController {
     @PostMapping("register")
     public String register(User user){
         int i = userDao.addUser(user);
-        System.out.println("addUser:"+i);
         return "redirect:index";
     }
 
@@ -51,7 +50,6 @@ public class HomePageController {
     @ResponseBody
     public ModelAndView login(User user,HttpServletRequest request){
         User findUser = userDao.findUserByUserName(user);
-        System.out.println("findUser:"+findUser);
         ModelAndView model=new ModelAndView();
         model.setViewName("index");
         model.addObject("currUser", findUser);
@@ -62,33 +60,27 @@ public class HomePageController {
 
     @RequestMapping("logout")
     public String logOut(HttpServletRequest request){
-        System.out.println("logout");
         request.getSession().invalidate();
         return "redirect:index";
     }
 
     @RequestMapping("essays")
     public String essays(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
-        System.out.println("essays");
         Object loginUser = request.getSession().getAttribute("currUser");
-        System.out.println(loginUser);
         if(loginUser==null){
             request.setAttribute("isLogin", false);
             attributes.addFlashAttribute("loginStatus", false);
-            System.out.println("重新登录");
             return "redirect:index";
         }else{
             request.setAttribute("currUser", loginUser);
             User user=(User)loginUser;
             List<Essays> allEssays = essaysService.findAllEssaysLimit(user.getUserId());
             request.setAttribute("allEssays", allEssays);
-            System.out.println("随笔");
             return "essays";
         }
     }
     @RequestMapping("myEssays")
     public String myEssays(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
-        System.out.println("redirect:essaysList-----");
         Object loginUser = request.getSession().getAttribute("currUser");
         if(loginUser==null){
             attributes.addFlashAttribute("loginStatus", false);

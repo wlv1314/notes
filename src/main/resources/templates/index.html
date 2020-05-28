@@ -16,20 +16,23 @@
                 <li class="active" data-target="#slidershow" data-slide-to="0"></li>
                 <li data-target="#slidershow" data-slide-to="1"></li>
                 <li data-target="#slidershow" data-slide-to="2"></li>
+                <li data-target="#slidershow" data-slide-to="3"></li>
+                <li data-target="#slidershow" data-slide-to="4"></li>
+                <li data-target="#slidershow" data-slide-to="5"></li>
             </ol>
 
             <!-- 设置轮播图片 -->
             <div class="carousel-inner" style="text-align:center">
                 <div class="item active">
-                    <a href="##"><img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg" alt=""  style="width: 100%;height: 100%;"></a>
+                    <a href="##"><img th:src="@{/img/love1.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
                     <!-- 图片对应标题和描述内容 -->
                     <div class="carousel-caption">
                         <h3>first</h3>
-                        <p>person</p>
+                        <p>flour</p>
                     </div>
                 </div>
                 <div class="item">
-                    <a href="##"><img src="https://static.runoob.com/images/mix/img_nature_wide.jpg" alt=""  style="width: 100%;height: 100%;"></a>
+                    <a href="##"><img th:src="@{/img/fengjing2.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
                     <!-- 图片对应标题和描述内容 -->
                     <div class="carousel-caption">
                         <h3>second</h3>
@@ -37,11 +40,35 @@
                     </div>
                 </div>
                 <div class="item">
-                    <a href="##"><img src="https://static.runoob.com/images/mix/img_mountains_wide.jpg" alt=""  style="width: 100%;height: 100%;"></a>
+                    <a href="##"><img th:src="@{/img/graphic1.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
                     <!-- 图片对应标题和描述内容 -->
                     <div class="carousel-caption">
                         <h3>third</h3>
+                        <p>quotes</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <a href="##"><img th:src="@{/img/fengjing1.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
+                    <!-- 图片对应标题和描述内容 -->
+                    <div class="carousel-caption">
+                        <h3>forth</h3>
                         <p>hill</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <a href="##"><img th:src="@{/img/graphic2.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
+                    <!-- 图片对应标题和描述内容 -->
+                    <div class="carousel-caption">
+                        <h3>fifth</h3>
+                        <p>beauty</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <a href="##"><img th:src="@{/img/fengjing3.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
+                    <!-- 图片对应标题和描述内容 -->
+                    <div class="carousel-caption">
+                        <h3>sixth</h3>
+                        <p>landscape</p>
                     </div>
                 </div>
             </div>
@@ -53,6 +80,13 @@
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
         </div>
+        <div>
+            <blockquote>
+                <small id="quotesContent"></small>
+                <footer class="text-right"><cite title="Source Title" id="quotesAuthor" >明天,你好!</cite></footer>
+                <p class="text-right"><a class="btn btn-primary btn-sm" href="javascript:void(0)" th:onclick="|javascript : getQutos()|" role="button">换一个</a></p>
+            </blockquote>
+        </div>
     </div>
     <div class="col-md-1"></div>
 </div>
@@ -63,6 +97,19 @@
         if(val == "false"){
             alert("请先登录!")
         }
+        getQutos();
     });
+
+    function getQutos() {
+        $.ajax({
+            async:true,
+            url:"[[@{/getQuotes}]]",
+            type:"POST",
+            success:function(data){
+                $("#quotesAuthor").html(data.quotes.quotesAuthor)
+                $("#quotesContent").html(data.quotes.quotesContent)
+            }
+        })
+    }
 </script>
 </html>
