@@ -49,12 +49,29 @@ public class HomePageController {
     @PostMapping("login")
     @ResponseBody
     public ModelAndView login(User user,HttpServletRequest request){
-        User findUser = userDao.findUserByUserName(user);
         ModelAndView model=new ModelAndView();
+        User findUser = userDao.findUserByUserName(user);
         model.setViewName("index");
-        model.addObject("currUser", findUser);
-        model.addObject("loginStatus", "success");
-        request.getSession().setAttribute("currUser", findUser);
+        if("".equals(user.getUserName()) ||
+                user.getUserName()=="" || user.getPassword()=="" ||
+                "".equals(user.getPassword())){
+            model.addObject("loginStatus", "err");
+            model.addObject("loginMsg", "用户名或密码不能为空!");
+        }
+        if(findUser==null){
+            model.addObject("currUser", findUser);
+            model.addObject("loginStatus", "err");
+            model.addObject("loginMsg", "用户名不存在!");
+        }else{
+            if(findUser.getPassword().equals(user.getPassword())){
+                model.addObject("currUser", findUser);
+                model.addObject("loginStatus", "success");
+                request.getSession().setAttribute("currUser", findUser);
+            }else{
+                model.addObject("loginStatus", "err");
+                model.addObject("loginMsg", "密码不正确!");
+            }
+        }
         return model;
     }
 

@@ -34,16 +34,29 @@ public class EssaysController {
 
     @PostMapping("addessays")
     @ResponseBody
-    public Map<String,Object> addEssays(Essays essays){
+    public Map<String,Object> addEssays(Essays essays,HttpServletRequest request){
+        Object loginUser = request.getSession().getAttribute("currUser");
+        User user=(User)loginUser;
+        List<Essays> allEssays = essaysService.findAllEssaysLimit(user.getUserId());
+        request.setAttribute("allEssays", allEssays);
+
         Map<String,Object> map=new HashMap<>();
+        String essaysTitle = essays.getEssaysTitle();
+        String essaysContent = essays.getEssaysContent();
+        if("".equals(essaysTitle)||"".equals(essaysContent)||essaysTitle==null || essaysContent==null){
+            map.put("msg", "标题或内容不得为空!");
+            return map;
+        }
         essays.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         int i = essaysService.addEssays(essays);
         if(i>0){
             map.put("msg", "随笔添加成功!");
+            return map;
         }else{
             map.put("msg", "随笔添加失败!");
+            return map;
         }
-        return map;
+
     }
 
     @PostMapping("essaysList")

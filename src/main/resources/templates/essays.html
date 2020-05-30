@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="col-md-10">
-                <form id="addEssaysForm" role="form">
+                <form id="addEssaysForm" role="form" onsubmit="return false" action="##" method="post">
                     <div class="media">
                         <div class="media-body">
                             <input style="display: none;" type="text" name="userId" th:value="${currUser.userId}">
@@ -47,7 +47,6 @@
 <script>
 $("#addEsayssBtn").click(function () {
     $.ajax({
-        async:"true",
         type:"POST",
         dataType:"json",
         url:"addessays",

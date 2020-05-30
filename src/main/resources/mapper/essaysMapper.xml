@@ -20,7 +20,7 @@
     </insert>
 
     <select id="findAllEssaysLimit" resultType="com.blog.notes.entity.Essays">
-        select * from notes_essays where userId=#{userId} limit 10;
+        select * from notes_essays where userId=#{userId} order by createTime desc limit 10;
     </select>
 
     <!-- 查询分页数据 -->

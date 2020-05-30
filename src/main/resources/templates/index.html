@@ -7,6 +7,7 @@
     <div class="col-md-1">
         <span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span>
         <span id="loginStatus" style="display: none;" th:text="${loginStatus}"></span>
+        <span id="loginMsg" style="display: none;" th:text="${loginMsg}"></span>
     </div>
     <div class="col-md-10">
         <div th:replace="common/head :: head_nav"></div>
@@ -96,6 +97,8 @@
         var val = $("#loginStatus").text();
         if(val == "false"){
             alert("请先登录!")
+        }else if(val == "err"){
+            alert($("#loginMsg").text())
         }
         getQutos();
     });
@@ -111,5 +114,85 @@
             }
         })
     }
+
+    $(document).ready(function() {
+        $('#registerForm').bootstrapValidator({
+//        live: 'disabled',
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                userName: {
+                    message: 'The username is not valid',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '用户名长度为6-30位'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_\.]+$/,
+                            message: '用户名由字母、数字、下划线组成'
+                        },
+                        remote: {
+                            url: 'remote.php',
+                            message: '该用户名已被注册'
+                        },
+                        different: {
+                            field: 'password',
+                            message: '用户名和密码不能相同'
+                        }
+                    }
+                },
+                email: {
+                    validators: {
+                        emailAddress: {
+                            message: '不是有效的电子邮件地址'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        identical: {
+                            field: 'conformPassword',
+                            message: '两次输入的密码不一致'
+                        },
+                        different: {
+                            field: 'userName',
+                            message: '用户名和密码不能相同'
+                        }
+                    }
+                },
+                conformPassword: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        identical: {
+                            field: 'password',
+                            message: '两次输入的密码不一致'
+                        },
+                        different: {
+                            field: 'userName',
+                            message: '用户名和密码不能相同'
+                        }
+                    }
+                }
+            }
+        });
+    });
+    $('#validateBtn').click(function() {
+        var flag = $('#registerForm').bootstrapValidator('validate');
+        alert(flag);
+    });
 </script>
 </html>
