@@ -140,9 +140,11 @@
                             regexp: /^[a-zA-Z0-9_\.]+$/,
                             message: '用户名由字母、数字、下划线组成'
                         },
+                        threshold :  6 , //有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
                         remote: {
-                            url: 'remote.php',
-                            message: '该用户名已被注册'
+                            url: 'validateUserName',
+                            message: '该用户名已被注册',
+                            delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
                         },
                         different: {
                             field: 'password',
@@ -191,8 +193,26 @@
         });
     });
     $('#validateBtn').click(function() {
-        var flag = $('#registerForm').bootstrapValidator('validate');
-        alert(flag);
+        var validate= $('#registerForm').data('bootstrapValidator').validate();
+        console.log("验证:"+validate.isValid())
+        if(validate.isValid()){
+            $.ajax({
+                async:true,
+                url:"[[@{/register}]]",
+                type:"POST",
+                data: $('#registerForm').serialize(),
+                success:function(data){
+                    $('#register').modal('hide')
+                    alert("用户名["+data.registerMsg.userName+"]注册成功!")
+                },
+                error:function () {
+                    alert("注册失败!")
+                }
+            })
+        }else{
+            alert("请按要求填写相关信息!")
+            return false;
+        }
     });
 </script>
 </html>

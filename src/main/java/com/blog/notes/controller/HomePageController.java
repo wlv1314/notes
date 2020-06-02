@@ -5,6 +5,7 @@ import com.blog.notes.entity.Essays;
 import com.blog.notes.entity.User;
 import com.blog.notes.service.EssaysService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: notes
@@ -41,9 +44,26 @@ public class HomePageController {
 
 
     @PostMapping("register")
-    public String register(User user){
+    @ResponseBody
+    public Map register(User user){
         int i = userDao.addUser(user);
-        return "redirect:index";
+        Map map=new HashMap();
+        map.put("registerMsg", user);
+        return map;
+    }
+
+    @PostMapping("validateUserName")
+    @ResponseBody
+    public Map<String, Boolean> validateInfo(User user){
+        Map<String, Boolean> map = new HashMap<>();
+        User findUser = userDao.findUserByUserName(user);
+        if(findUser==null){
+            map.put("valid", true);
+            return map;
+        }else{
+            map.put("valid", false);
+            return map;
+        }
     }
 
     @PostMapping("login")
