@@ -1,0 +1,14 @@
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (1, 3, 4, 16, '好', '2020-06-03T10:00:01');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (2, 3, 3, 16, '这是测试啊', '2020-06-04T11:37:45');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (3, 3, 3, 16, '又来了一波测试', '2020-06-04T11:38:16');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (4, 3, 3, 16, '还来测试', '2020-06-04T11:39:06');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (5, 3, 3, 16, '这测试挺多', '2020-06-04T11:39:25');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (7, 3, 3, 47, '和明白人说话，和踏实人做事，和厚道人谈情', '2020-06-04T15:11:01');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (8, 3, 3, 18, '写的很好，学习了', '2020-06-04T15:23:10');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (9, 3, 3, 23, '真的好用...', '2020-06-04T15:24:39');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (10, 3, 3, 24, '分页工具类，很实用...', '2020-06-04T15:25:32');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (11, 3, 3, 25, '金额转换，厉害', '2020-06-04T15:28:51');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (12, 3, 3, 32, '修养很重要', '2020-06-04T15:29:56');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (14, 4, 3, 47, '在手机上看到的，说的很好！', '2020-06-04T16:56:40');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (15, 4, 3, 47, '真的好用...', '2020-06-04T17:14:41');
+INSERT INTO `notes_comment` (`commentId`, `currUserId`, `commentUserId`, `essaysId`, `comment`, `createTime`) VALUES (16, 4, 4, 40, '自由自在', '2020-06-04T17:32:51');
