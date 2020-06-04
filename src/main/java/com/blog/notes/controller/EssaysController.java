@@ -2,6 +2,7 @@ package com.blog.notes.controller;
 
 import com.blog.notes.entity.Essays;
 import com.blog.notes.entity.User;
+import com.blog.notes.service.CommentService;
 import com.blog.notes.service.impl.EssaysServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,8 @@ public class EssaysController {
 
     @Resource
     private EssaysServiceImpl essaysService;
+    @Resource
+    private CommentService commentService;
 
     @PostMapping("addessays")
     @ResponseBody
@@ -122,12 +125,16 @@ public class EssaysController {
             modelAndView.addObject("msg", "login please!!!");
             return "redirect:index";
         }
+        //删除随笔
         essaysService.deleteEssaysByEssaysId(essaysId);
+        //删除与随笔相关的评论
+        commentService.deleteCommentByEssaysId(essaysId);
         modelAndView.setViewName("showessays");
         modelAndView.addObject("currUser", loginUser);
         request.setAttribute("currUser", loginUser);
         return "redirect:myEssays";
     }
+
 
 
 }

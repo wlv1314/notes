@@ -33,10 +33,12 @@ public class SearchController {
     public ModelAndView searchInfo(String searchName,HttpServletRequest request){
         Object loginUser = request.getSession().getAttribute("currUser");
         ModelAndView modelAndView=new ModelAndView();
-        List<Essays> essays = essaysService.findEssaysBySearchName(searchName);
+        User user = (User) loginUser;
+        List<Essays> essays = essaysService.findEssaysBySearchName(searchName,user);
         modelAndView.setViewName("searchList");
         modelAndView.addObject("list", essays);
         modelAndView.addObject("currUser", loginUser);
+        modelAndView.addObject("searchName", searchName);
         request.setAttribute("currUser", loginUser);
         return modelAndView;
     }

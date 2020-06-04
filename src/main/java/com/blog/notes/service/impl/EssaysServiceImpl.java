@@ -2,6 +2,7 @@ package com.blog.notes.service.impl;
 
 import com.blog.notes.dao.EssaysDao;
 import com.blog.notes.entity.Essays;
+import com.blog.notes.entity.User;
 import com.blog.notes.service.EssaysService;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +50,14 @@ public class EssaysServiceImpl implements EssaysService {
         essaysDao.deleteEssaysByEssaysId(essaysId);
     }
 
+
     @Override
-    public List<Essays> findEssaysBySearchName(String searchName) {
-        List<Essays> essays = essaysDao.findEssaysBySearchName(searchName);
+    public List<Essays> findEssaysBySearchName(String searchName, User user) {
+        Integer userId=null;
+        if(user!=null){
+            userId=user.getUserId();
+        }
+        List<Essays> essays = essaysDao.findEssaysBySearchName(searchName,userId);
         if(essays!=null && essays.size()>0){
             return essays;
         }

@@ -7,6 +7,7 @@
         <result column="essaysTitle" property="essaysTitle"/>
         <result column="essaysContent" property="essaysContent"/>
         <result column="createTime" property="createTime"/>
+        <result column="checkPermissions" property="checkPermissions"/>
     </resultMap>
     <parameterMap id="Essays" type="com.blog.notes.entity.Essays"/>
     <sql id="Base_Column_List">
@@ -15,8 +16,8 @@
 
     <insert id="addEssays" parameterType="com.blog.notes.entity.Essays">
       insert into
-        notes_essays (userId, essaysTitle,essaysContent,createTime)
-      values (#{userId},#{essaysTitle},#{essaysContent},#{createTime})
+        notes_essays (userId, essaysTitle,essaysContent,createTime,checkPermissions)
+      values (#{userId},#{essaysTitle},#{essaysContent},#{createTime},#{checkPermissions})
     </insert>
 
     <select id="findAllEssaysLimit" resultType="com.blog.notes.entity.Essays">
@@ -44,7 +45,13 @@
 
     <!--分页搜索-->
     <select id="findEssaysBySearchName" resultType="com.blog.notes.entity.Essays">
-        select * from notes_essays where essaysTitle like "%"#{searchName}"%"
+        select * from notes_essays where checkPermissions=2 AND essaysTitle like "%"#{searchName}"%"
+        <if test="userId!=null">
+            union
+            SELECT * FROM `notes_essays`
+            WHERE userId=#{userId} and checkPermissions =1
+            AND essaysTitle like "%"#{searchName}"%"
+        </if>
     </select>
 
 </mapper>

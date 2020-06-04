@@ -15,6 +15,7 @@ public class Essays {
     private String essaysTitle;
     private String essaysContent;
     private String createTime;
+    private Integer checkPermissions;
 
 
 }

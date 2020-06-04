@@ -1,6 +1,7 @@
 package com.blog.notes.service;
 
 import com.blog.notes.entity.Essays;
+import com.blog.notes.entity.User;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface EssaysService {
 
     Essays findEssaysByEssaysId(int essaysId);
     void deleteEssaysByEssaysId(int essaysId);
-    List<Essays> findEssaysBySearchName(String searchName);
+    List<Essays> findEssaysBySearchName(String searchName, User user);
 }
