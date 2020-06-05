@@ -77,7 +77,6 @@ public class EssaysController {
 
         try {
             int count = essaysService.count(currUser.getUserId());// 获取总条目数
-            System.out.println("count:"+count);
             int totalPage = count / pageSize;// 计算总页数
             if (count % pageSize != 0) {// 不满一页的数据按一页计算
                 totalPage++;
@@ -88,7 +87,6 @@ public class EssaysController {
 
             int offset = (currPage - 1) * pageSize;// 计算sql需要的起始索引
             List<Essays> list = essaysService.findAllEssays(currUser.getUserId(),offset, pageSize);// 根据起始索引和页面大小去查询数据
-            System.out.println("list:"+list.size()+"  ---  "+list.toString());
 
             // 封装数据，并返回
             map.put("page", currPage);
@@ -135,6 +133,20 @@ public class EssaysController {
         return "redirect:myEssays";
     }
 
+    @PostMapping("updateEssays")
+    @ResponseBody
+    public Map updateEssaysByEssaysId(Essays essays,HttpServletRequest request){
+        Object loginUser = request.getSession().getAttribute("currUser");
+        Map map=new HashMap();
+        System.out.println(essays);
+        int i = essaysService.updateEssaysByEssaysId(essays);
+        if(i>0){
+            map.put("msg", "更新成功!");
+        }else{
+            map.put("msg", "更新失败!");
+        }
+        return map;
+    }
 
 
 }

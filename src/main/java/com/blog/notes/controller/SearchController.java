@@ -46,7 +46,6 @@ public class SearchController {
     @GetMapping("searchInfo/{essaysId}")
     @ResponseBody
     public ModelAndView findEssaysContentByEssaysId(@PathVariable int essaysId,ModelAndView modelAndView, HttpServletRequest request){
-        System.out.println("搜索也id"+essaysId);
         Object loginUser = request.getSession().getAttribute("currUser");
         Essays essaysByEssaysId = essaysService.findEssaysByEssaysId(essaysId);
         modelAndView.setViewName("showessays");

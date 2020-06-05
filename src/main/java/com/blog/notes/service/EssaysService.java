@@ -20,4 +20,5 @@ public interface EssaysService {
     Essays findEssaysByEssaysId(int essaysId);
     void deleteEssaysByEssaysId(int essaysId);
     List<Essays> findEssaysBySearchName(String searchName, User user);
+    int updateEssaysByEssaysId(Essays essays);
 }

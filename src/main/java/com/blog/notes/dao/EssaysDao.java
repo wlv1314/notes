@@ -21,4 +21,5 @@ public interface EssaysDao {
     Essays findEssaysByEssaysId(int essaysId);
     void deleteEssaysByEssaysId(int essaysId);
     List<Essays> findEssaysBySearchName(@Param("searchName") String searchName,@Param("userId") Integer userId);
+    int updateEssaysByEssaysId(Essays essays);
 }

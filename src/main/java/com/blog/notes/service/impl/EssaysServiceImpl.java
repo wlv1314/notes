@@ -63,4 +63,9 @@ public class EssaysServiceImpl implements EssaysService {
         }
         return null;
     }
+
+    @Override
+    public int updateEssaysByEssaysId(Essays essays) {
+        return essaysDao.updateEssaysByEssaysId(essays);
+    }
 }

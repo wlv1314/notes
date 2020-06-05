@@ -11,7 +11,7 @@
     </resultMap>
     <parameterMap id="Essays" type="com.blog.notes.entity.Essays"/>
     <sql id="Base_Column_List">
-        essaysId,userId, essaysTitle,essaysContent,createTime
+        essaysId,userId, essaysTitle,essaysContent,createTime,checkPermissions
     </sql>
 
     <insert id="addEssays" parameterType="com.blog.notes.entity.Essays">
@@ -53,5 +53,11 @@
             AND essaysTitle like "%"#{searchName}"%"
         </if>
     </select>
+
+    <update id="updateEssaysByEssaysId" parameterType="com.blog.notes.entity.Essays">
+        update `notes_essays`
+        set essaysContent=#{essaysContent},checkPermissions=#{checkPermissions}
+        where essaysId=#{essaysId}
+    </update>
 
 </mapper>
