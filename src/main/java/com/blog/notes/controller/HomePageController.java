@@ -4,6 +4,7 @@ import com.blog.notes.dao.UserDao;
 import com.blog.notes.entity.Essays;
 import com.blog.notes.entity.User;
 import com.blog.notes.service.EssaysService;
+import com.blog.notes.service.MailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,6 +34,8 @@ public class HomePageController {
     private UserDao userDao;
     @Resource
     private EssaysService essaysService;
+    @Resource
+    private MailService mailService;
 
     @RequestMapping("index")
     public String toIndex(HttpServletRequest request,@ModelAttribute("loginStatus") String loginStatus){
@@ -69,6 +72,7 @@ public class HomePageController {
     @PostMapping("login")
     @ResponseBody
     public ModelAndView login(User user,HttpServletRequest request){
+        mailService.sendSimpleMail("1245080925@qq.com", "随笔", "这是验证码");
         ModelAndView model=new ModelAndView();
         User findUser = userDao.findUserByUserName(user);
         model.setViewName("index");
