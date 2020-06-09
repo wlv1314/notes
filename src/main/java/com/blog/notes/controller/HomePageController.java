@@ -128,4 +128,16 @@ public class HomePageController {
         }
     }
 
+    @RequestMapping("choiceness")
+    public String choiceness(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
+        Object loginUser = request.getSession().getAttribute("currUser");
+        if(loginUser==null){
+            attributes.addFlashAttribute("loginStatus", false);
+            return "redirect:index";
+        }else{
+            request.setAttribute("currUser", loginUser);
+            return "choicenessList";
+        }
+    }
+
 }

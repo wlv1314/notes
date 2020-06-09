@@ -14,11 +14,12 @@ import java.util.List;
 public interface EssaysService {
     int addEssays(Essays essays);
     List<Essays> findAllEssaysLimit(int userId);
-    List<Essays> findAllEssays(int userId,int offSet,int pageSize);
-    int count(int userId);
+    List<Essays> findAllEssays(Integer userId,int offSet,int pageSize);
+    int count(Integer userId);
 
     Essays findEssaysByEssaysId(int essaysId);
     void deleteEssaysByEssaysId(int essaysId);
     List<Essays> findEssaysBySearchName(String searchName, User user);
     int updateEssaysByEssaysId(Essays essays);
+    int addEssaysLike(int essaysId);
 }

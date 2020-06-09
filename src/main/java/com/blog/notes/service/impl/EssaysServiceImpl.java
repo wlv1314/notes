@@ -31,12 +31,12 @@ public class EssaysServiceImpl implements EssaysService {
     }
 
     @Override
-    public List<Essays> findAllEssays(int userId,int offSet,int pageSize) {
+    public List<Essays> findAllEssays(Integer userId,int offSet,int pageSize) {
         return essaysDao.findAllEssays(userId,offSet,pageSize);
     }
 
     @Override
-    public int count(int userId) {
+    public int count(Integer userId) {
         return essaysDao.count(userId);
     }
 
@@ -68,4 +68,10 @@ public class EssaysServiceImpl implements EssaysService {
     public int updateEssaysByEssaysId(Essays essays) {
         return essaysDao.updateEssaysByEssaysId(essays);
     }
+
+    @Override
+    public int addEssaysLike(int essaysId) {
+        return essaysDao.addEssaysLike(essaysId);
+    }
+
 }
