@@ -24,7 +24,7 @@
                             <div id="radio" class="form-group">
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="checkPermissions" id="optionsRadios1" th:value="${ebei.checkPermissions}" checked disabled>
+                                        <input type="radio" name="checkPermissions" id="optionsRadios1" th:value="${ebei.checkPermissions}" disabled>
                                         仅自己可见
                                     </label>
                                 </div>
@@ -81,6 +81,13 @@
 <script>
 
     $(function () {
+        var value = $("#optionsRadios1").val();
+        if(value==2){
+            $('input:radio:last').attr('checked', 'checked');
+        }else{
+            $('input:radio:first').attr("checked",'checked')
+        }
+
         var val = $("#userStatus").val();
         if(val==null){
             $("#radio").css("display","none");
@@ -97,11 +104,6 @@
                 $("#deleteBtn").css("display","none");
                 $(".labelTip").attr("data-toggle","top");
                 $(".labelTip").attr("title","您不能删除他人作品");
-                /*$('#deleteBtn').hover(function(){
-                    $(this).css('background', 'red');
-                }, function() {
-                    $(this).css('background', '#fff');
-                });*/
             }
         }
     })
@@ -135,8 +137,6 @@
     //编辑
     function editEssays(essaysId) {
         var text = $("#editBtn").text();
-        var permissions = $("input[type='radio']:checked").val();
-        alert(permissions)
         if(text == '编辑'){
             $("textarea").removeAttr("readonly");
             $("#optionsRadios1").removeAttr("disabled");
@@ -145,6 +145,7 @@
         }else{
             //提交
             var permissions = $("input[type='radio']:checked").val();
+            // var val = $('input[type=radio][name=checkPermissions]:checked').val();
             var content = $("textarea").text();
             var essaysData = {'essaysId':essaysId,'essaysContent':content,'checkPermissions':permissions};
             $.ajax({
@@ -153,7 +154,19 @@
                 url:"[[@{/updateEssays}]]",
                 type:"POST",
                 success:function(data){
-                    alert(data.msg)
+                    alert(data.msg);
+                    $("textarea").text(content);
+                    if(permissions==1){
+                        $('input:radio:first').attr('checked', 'checked');
+                    }else{
+                        $('input:radio:last').attr('checked', 'checked');
+                    }
+                    if(text == '提交'){
+                        $("#editBtn").text("编辑")
+                        $("textarea").attr("readonly","readonly");
+                        $("#optionsRadios1").attr("disabled","disabled");
+                        $("#optionsRadios2").attr("disabled","disabled");
+                    }
                 },
                 error:function () {
                     alert("修改异常!")
@@ -204,8 +217,6 @@
                 var essaysId = document.getElementsByName("essaysId");
                 comments(essaysId[0].value);
                 document.getElementsByName("comment")[0].value="";
-
-
             },
             error : function(result) {
                 alert("系统异常！"+result);
