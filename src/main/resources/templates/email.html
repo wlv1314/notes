@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>随笔注册</title>
 </head>
 <body>
-$END$
+    <div class="jumbotron">
+        <h3>尊敬的<span th:text="${userName}">用户</span>您好:</h3>
+        <p>欢迎您使用"随笔",您的验证码为:<span th:text="${code}"></span>,请确保是本人操作,不要把验证码泄露给其他人!</p>
+        <p>如非本人操作,可不用理会!</p>
+    </div>
+
 </body>
 </html>

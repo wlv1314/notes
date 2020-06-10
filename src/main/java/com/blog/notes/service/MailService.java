@@ -15,4 +15,6 @@ public interface MailService {
     void sendAttachmentsMail(String to, String subject, String content, String filePath);
     //带有静态资源的邮件
     void sendInlineResourceMail(String to, String subject, String content, String rscPath, String rscId);
+
+    void sendTemplateMail(String to, String subject, String userName,String code);
 }

@@ -7,6 +7,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -24,6 +26,8 @@ public class MailServiceImpl implements MailService {
 
     @Resource
     private JavaMailSender javaMailSender;
+    @Resource
+    private TemplateEngine templateEngine;
     @Value("${from-mail-addr}")
     private String from;
 
@@ -105,5 +109,16 @@ public class MailServiceImpl implements MailService {
             System.out.println("发送嵌入静态资源的邮件时发生异常！");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void sendTemplateMail(String to, String subject, String userName,String code) {
+        Context context = new Context();
+        //设置参数
+        context.setVariable("userName", userName);
+        context.setVariable("code", code);
+        //emailTemplate为模板文件的文件名，即html demo的文件名
+        String tempContext = templateEngine.process("email", context);
+        sendHTMLMail(to, subject, tempContext);
     }
 }

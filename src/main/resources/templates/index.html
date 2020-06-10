@@ -115,6 +115,26 @@
         })
     }
 
+    function getValidateCode(){
+        var serialize = $('#registerForm').serialize();
+        // if(serialize.email==null){
+        //     alert("邮箱")
+        //     return;
+        // }
+        $.ajax({
+            async:true,
+            url:"[[@{/getValidateCode}]]",
+            type:"POST",
+            data: serialize,
+            success:function(data){
+                alert("获取验证码成功!")
+            },
+            error:function () {
+                alert("获取验证码失败!")
+            }
+        })
+    }
+
     $(document).ready(function() {
         $('#registerForm').bootstrapValidator({
 //        live: 'disabled',
@@ -202,8 +222,13 @@
                 type:"POST",
                 data: $('#registerForm').serialize(),
                 success:function(data){
-                    $('#register').modal('hide')
-                    alert("用户名["+data.registerMsg.userName+"]注册成功!")
+                    if(data.registerStatus==true){
+                        $('#register').modal('hide');
+                        alert("用户名["+data.registerMsg.userName+"]注册成功!")
+                    }else{
+                        alert("用户名["+data.registerMsg.userName+"]注册失败,验证码不正确!")
+                    }
+
                 },
                 error:function () {
                     alert("注册失败!")

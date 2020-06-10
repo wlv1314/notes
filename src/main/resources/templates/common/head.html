@@ -82,6 +82,11 @@
                         <label>邮箱</label>
                         <input class="form-control" name="email" type="email" placeholder="例如:123@123.com">
                     </div>
+                    <div class="form-group">
+                        <label>验证码</label>
+                        <input class="form-control" name="validateCode" type="validateCode" placeholder="请输入6位验证码">
+                        <button onclick="getValidateCode()">获取验证码</button>
+                    </div>
                     <div class="text-right">
                         <button class="btn btn-primary" id="validateBtn">提交</button>
                         <button class="btn btn-danger" data-dismiss="modal">取消</button>

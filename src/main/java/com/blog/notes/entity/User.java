@@ -2,6 +2,7 @@ package com.blog.notes.entity;
 
 import lombok.Data;
 
+
 /**
  * @program: notes
  * @description
@@ -15,4 +16,5 @@ public class User {
     private String password;
     private String conformPassword;
     private String email;
+    private String validateCode;
 }

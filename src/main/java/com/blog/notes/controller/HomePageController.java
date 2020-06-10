@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @program: notes
@@ -37,6 +38,8 @@ public class HomePageController {
     @Resource
     private MailService mailService;
 
+    Map mapCode=new ConcurrentHashMap();
+
     @RequestMapping("index")
     public String toIndex(HttpServletRequest request,@ModelAttribute("loginStatus") String loginStatus){
         Object loginUser = request.getSession().getAttribute("currUser");
@@ -45,14 +48,34 @@ public class HomePageController {
         return "index";
     }
 
+    @PostMapping("getValidateCode")
+    @ResponseBody
+    public Map getValidateCode(User user){
+        Map map=new HashMap();
+        map.put("registerMsg", user);
+        Integer randNum = (int)(Math.random()* (999999)+1);//产生(0,999999]之间的随机数
+        String code = String.format("%06d",randNum);//进行六位数补全
+        mailService.sendTemplateMail(user.getEmail(), "随笔注册", user.getUserName(),code);
+        map.put("code",code);
+        mapCode.put(user.getEmail(),code);
+        return map;
+    }
+
 
     @PostMapping("register")
     @ResponseBody
     public Map register(User user){
-        int i = userDao.addUser(user);
-        Map map=new HashMap();
-        map.put("registerMsg", user);
-        return map;
+        Map mapInfo=new HashMap();
+        Object code = mapCode.get(user.getEmail());
+        if(code.equals(user.getValidateCode())){
+            int i = userDao.addUser(user);
+            mapInfo.put("registerStatus",true);
+            mapInfo.put("registerMsg", user);
+        }else{
+            mapInfo.put("registerStatus",false);
+            mapInfo.put("registerMsg", user);
+        }
+        return mapInfo;
     }
 
     @PostMapping("validateUserName")
@@ -72,7 +95,6 @@ public class HomePageController {
     @PostMapping("login")
     @ResponseBody
     public ModelAndView login(User user,HttpServletRequest request){
-        mailService.sendSimpleMail("1245080925@qq.com", "随笔", "这是验证码");
         ModelAndView model=new ModelAndView();
         User findUser = userDao.findUserByUserName(user);
         model.setViewName("index");
