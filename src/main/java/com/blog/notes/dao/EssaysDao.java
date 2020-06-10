@@ -16,7 +16,11 @@ import java.util.List;
 public interface EssaysDao {
     int addEssays(Essays essays);
     List<Essays> findAllEssaysLimit(int userId);
-    List<Essays> findAllEssays(@Param("userId") int userId,@Param("offSet") int offSet,@Param("pageSize") int pageSize);
-    int count(int userId);
-    Essays findEssaysById(int essaysId);
+    List<Essays> findAllEssays(@Param("userId") Integer userId,@Param("offSet") int offSet,@Param("pageSize") int pageSize);
+    int count(@Param("userId") Integer userId);
+    Essays findEssaysByEssaysId(int essaysId);
+    void deleteEssaysByEssaysId(int essaysId);
+    List<Essays> findEssaysBySearchName(@Param("searchName") String searchName,@Param("userId") Integer userId);
+    int updateEssaysByEssaysId(Essays essays);
+    int addEssaysLike(int essaysId);
 }

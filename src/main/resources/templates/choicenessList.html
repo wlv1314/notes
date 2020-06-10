@@ -4,7 +4,9 @@
 </head>
 <body>
 <div class="row">
-    <div class="col-md-1"><span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span></div>
+    <div class="col-md-1"><span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span>
+        <span id="userId" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userId}"></span>
+    </div>
     <div class="col-md-10">
         <div th:replace="common/head :: head_nav"></div>
         <!-- 分页容器：显示数据 -->
@@ -21,10 +23,11 @@
 <script>
     $(function() {
         pageStart();//开始分页
+
         function pageStart() {//分页函数
             $.ajax({ //去后台查询第一页数据
                 type: "post",
-                url: "essaysList",
+                url: "choicenessList",
                 dataType: "json",
                 data: {"currPage":1}, //参数：当前页为1
                 success: function (data) {
@@ -37,7 +40,6 @@
                         totalPages: data.totalPage, //总页数
                         numberOfPages: data.pageSize,//每页记录数
                         itemTexts: function (type, page, current) {//设置分页按钮显示字体样式
-                            // alert("itemTexts type:"+type);
                             switch (type) {
                                 case "first":
                                     return "首页";
@@ -52,9 +54,8 @@
                             }
                         },
                         onPageClicked: function (event, originalEvent, type, page) {//分页按钮点击事件
-                            // alert("onPageClicked page:"+page);
                             $.ajax({//根据page去后台加载数据
-                                url: "essaysList",
+                                url: "choicenessList",
                                 type: "post",
                                 dataType: "json",
                                 data: {"currPage": page},
@@ -70,19 +71,54 @@
         }
 
         function appendHtml(list,currPage) {//此函数用于处理后台返回的数据，根据自己需求来实现页面拼接
-            var tableShow = '';
+            var tableShow = '<table class="table table-hover" style="table-layout: fixed;">';
             for (var i = 0; i < list.length; i++) {
-                tableShow += '<a href="news/' + list[i].essaysId + '/'+currPage+'">';
-                tableShow += '<div class="am-u-sm-4 am-list-thumb">';
-                /*tableShow += '<img src="' + list[i].newsUrl + '"/>';*/
-                tableShow += '</div><div class=" am-u-sm-7 am-list-main">';
-                tableShow += '<h3 class="am-list-item-hd">' + list[i].essaysTitle + '</h3>';
-                tableShow += '</div><div class="newsico am-fr">';
-                tableShow += '<i class="am-icon-clock-o  am-hide-sm-only">' + list[i].essaysContent.substring(1,100) + '</i></div></a>';
-                tableShow += '<i>'+list[i].createTime+'</i><hr>';
+                tableShow += '<tr"><td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap">';
+                tableShow += '<a href="news/' + list[i].essaysId + '/'+currPage+'">' + list[i].essaysContent + '</a></td>';
+                tableShow += '<td class="tdid" style="display: none;">'+list[i].userId+'</td><td style="width: 14%">';
+                tableShow += '<a href="javascript:void(0);" onclick="reflashLike(' + list[i].essaysId + ')" title="点赞"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true">喜欢&nbsp;</span></a>';
+                tableShow += '<i id="i'+list[i].essaysId+'">'+list[i].praise+'</i>&nbsp;<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></td></tr>'
             }
-            $('#htmlDiv').html(tableShow)
+            tableShow += "</table>";
+            $('#htmlDiv').html(tableShow);
+            var tdid = $(".tdid");
+            var val = $("#userId").text();
+            for (var i = 0; i < tdid.length; i++) {
+                var userId = tdid.text()[i];
+                if(userId==val){
+                    var spantd = tdid.parent().eq(i).children("td").eq(2).find("span").eq(0);
+                    spantd.removeAttr("class").attr("class","glyphicon glyphicon-heart");
+                }
+            }
         }
     });
+
+    function reflashLike(essaysId) {
+        var val = $("#loginStatus").text();
+        if(val == "false"){
+            alert("请先登录!")
+        }else{
+            $.ajax({
+                type: "post",
+                url: "[[@{/addEssaysLike}]]",
+                data: {'essaysId':essaysId},
+                dataType: "json",
+                success: function(data){
+                    $("#i"+essaysId).text(data.essays.praise)
+                    // $('#resText').empty();   //清空resText里面的所有内容
+                    // var html = '';
+                    // $.each(data, function(commentIndex, comment){
+                    //     html += '<div class="comment"><h6>' + comment['username']
+                    //         + ':</h6><p class="para"' + comment['content']
+                    //         + '</p></div>';
+                    // });
+                    // $('#resText').html(html);
+                },
+                error:function (data) {
+                    alert("点赞失败了!"+data)
+                }
+            })
+        }
+    }
 </script>
 </html>

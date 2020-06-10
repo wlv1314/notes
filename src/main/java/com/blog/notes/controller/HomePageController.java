@@ -4,17 +4,23 @@ import com.blog.notes.dao.UserDao;
 import com.blog.notes.entity.Essays;
 import com.blog.notes.entity.User;
 import com.blog.notes.service.EssaysService;
+import com.blog.notes.service.MailService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: notes
@@ -28,67 +34,113 @@ public class HomePageController {
     private UserDao userDao;
     @Resource
     private EssaysService essaysService;
+    @Resource
+    private MailService mailService;
 
     @RequestMapping("index")
-    public String toIndex(){
+    public String toIndex(HttpServletRequest request,@ModelAttribute("loginStatus") String loginStatus){
+        Object loginUser = request.getSession().getAttribute("currUser");
+        request.setAttribute("currUser", loginUser);
+        request.setAttribute("loginStatus", loginStatus);
         return "index";
     }
 
 
     @PostMapping("register")
-    public String register(User user){
+    @ResponseBody
+    public Map register(User user){
         int i = userDao.addUser(user);
-        System.out.println("addUser:"+i);
-        return "redirect:index";
+        Map map=new HashMap();
+        map.put("registerMsg", user);
+        return map;
+    }
+
+    @PostMapping("validateUserName")
+    @ResponseBody
+    public Map<String, Boolean> validateInfo(User user){
+        Map<String, Boolean> map = new HashMap<>();
+        User findUser = userDao.findUserByUserName(user);
+        if(findUser==null){
+            map.put("valid", true);
+            return map;
+        }else{
+            map.put("valid", false);
+            return map;
+        }
     }
 
     @PostMapping("login")
     @ResponseBody
     public ModelAndView login(User user,HttpServletRequest request){
-        User findUser = userDao.findUserByUserName(user);
-        System.out.println("findUser:"+findUser);
+        mailService.sendSimpleMail("1245080925@qq.com", "随笔", "这是验证码");
         ModelAndView model=new ModelAndView();
+        User findUser = userDao.findUserByUserName(user);
         model.setViewName("index");
-        model.addObject("currUser", findUser);
-        model.addObject("loginStatus", "success");
-        request.getSession().setAttribute("currUser", findUser);
+        if("".equals(user.getUserName()) ||
+                user.getUserName()=="" || user.getPassword()=="" ||
+                "".equals(user.getPassword())){
+            model.addObject("loginStatus", "err");
+            model.addObject("loginMsg", "用户名或密码不能为空!");
+        }
+        if(findUser==null){
+            model.addObject("currUser", findUser);
+            model.addObject("loginStatus", "err");
+            model.addObject("loginMsg", "用户名不存在!");
+        }else{
+            if(findUser.getPassword().equals(user.getPassword())){
+                model.addObject("currUser", findUser);
+                model.addObject("loginStatus", "success");
+                request.getSession().setAttribute("currUser", findUser);
+            }else{
+                model.addObject("loginStatus", "err");
+                model.addObject("loginMsg", "密码不正确!");
+            }
+        }
         return model;
     }
 
     @RequestMapping("logout")
     public String logOut(HttpServletRequest request){
-        System.out.println("logout");
         request.getSession().invalidate();
         return "redirect:index";
     }
 
     @RequestMapping("essays")
-    public String essays(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("essays");
+    public String essays(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
         Object loginUser = request.getSession().getAttribute("currUser");
-        System.out.println(loginUser);
         if(loginUser==null){
             request.setAttribute("isLogin", false);
-            System.out.println("重新登录");
+            attributes.addFlashAttribute("loginStatus", false);
             return "redirect:index";
         }else{
             request.setAttribute("currUser", loginUser);
             User user=(User)loginUser;
             List<Essays> allEssays = essaysService.findAllEssaysLimit(user.getUserId());
             request.setAttribute("allEssays", allEssays);
-            System.out.println("随笔");
             return "essays";
         }
     }
     @RequestMapping("myEssays")
-    public String myEssays(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("redirect:essaysList-----");
+    public String myEssays(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
         Object loginUser = request.getSession().getAttribute("currUser");
         if(loginUser==null){
+            attributes.addFlashAttribute("loginStatus", false);
             return "redirect:index";
         }else{
             request.setAttribute("currUser", loginUser);
             return "essaysList";
+        }
+    }
+
+    @RequestMapping("choiceness")
+    public String choiceness(HttpServletRequest request, HttpServletResponse response,RedirectAttributes attributes) throws IOException {
+        Object loginUser = request.getSession().getAttribute("currUser");
+        if(loginUser==null){
+            attributes.addFlashAttribute("loginStatus", false);
+            return "redirect:index";
+        }else{
+            request.setAttribute("currUser", loginUser);
+            return "choicenessList";
         }
     }
 

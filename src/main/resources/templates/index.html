@@ -6,6 +6,8 @@
 <div class="row">
     <div class="col-md-1">
         <span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}"></span>
+        <span id="loginStatus" style="display: none;" th:text="${loginStatus}"></span>
+        <span id="loginMsg" style="display: none;" th:text="${loginMsg}"></span>
     </div>
     <div class="col-md-10">
         <div th:replace="common/head :: head_nav"></div>
@@ -15,20 +17,23 @@
                 <li class="active" data-target="#slidershow" data-slide-to="0"></li>
                 <li data-target="#slidershow" data-slide-to="1"></li>
                 <li data-target="#slidershow" data-slide-to="2"></li>
+                <li data-target="#slidershow" data-slide-to="3"></li>
+                <li data-target="#slidershow" data-slide-to="4"></li>
+                <li data-target="#slidershow" data-slide-to="5"></li>
             </ol>
 
             <!-- 设置轮播图片 -->
             <div class="carousel-inner" style="text-align:center">
                 <div class="item active">
-                    <a href="##"><img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg" alt=""  style="width: 100%;height: 100%;"></a>
+                    <a href="##"><img th:src="@{/img/love1.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
                     <!-- 图片对应标题和描述内容 -->
                     <div class="carousel-caption">
                         <h3>first</h3>
-                        <p>person</p>
+                        <p>flour</p>
                     </div>
                 </div>
                 <div class="item">
-                    <a href="##"><img src="https://static.runoob.com/images/mix/img_nature_wide.jpg" alt=""  style="width: 100%;height: 100%;"></a>
+                    <a href="##"><img th:src="@{/img/fengjing2.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
                     <!-- 图片对应标题和描述内容 -->
                     <div class="carousel-caption">
                         <h3>second</h3>
@@ -36,11 +41,35 @@
                     </div>
                 </div>
                 <div class="item">
-                    <a href="##"><img src="https://static.runoob.com/images/mix/img_mountains_wide.jpg" alt=""  style="width: 100%;height: 100%;"></a>
+                    <a href="##"><img th:src="@{/img/graphic1.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
                     <!-- 图片对应标题和描述内容 -->
                     <div class="carousel-caption">
                         <h3>third</h3>
+                        <p>quotes</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <a href="##"><img th:src="@{/img/fengjing1.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
+                    <!-- 图片对应标题和描述内容 -->
+                    <div class="carousel-caption">
+                        <h3>forth</h3>
                         <p>hill</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <a href="##"><img th:src="@{/img/graphic2.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
+                    <!-- 图片对应标题和描述内容 -->
+                    <div class="carousel-caption">
+                        <h3>fifth</h3>
+                        <p>beauty</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <a href="##"><img th:src="@{/img/fengjing3.jpg}" alt=""  style="width: 100%;height: 100%;"></a>
+                    <!-- 图片对应标题和描述内容 -->
+                    <div class="carousel-caption">
+                        <h3>sixth</h3>
+                        <p>landscape</p>
                     </div>
                 </div>
             </div>
@@ -52,9 +81,138 @@
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
         </div>
+        <div>
+            <blockquote>
+                <small id="quotesContent"></small>
+                <footer class="text-right"><cite title="Source Title" id="quotesAuthor" >明天,你好!</cite></footer>
+                <p class="text-right"><a class="btn btn-primary btn-sm" href="javascript:void(0)" th:onclick="|javascript : getQutos()|" role="button">换一个</a></p>
+            </blockquote>
+        </div>
     </div>
     <div class="col-md-1"></div>
 </div>
 </body>
+<script>
+    $(function () {
+        var val = $("#loginStatus").text();
+        if(val == "false"){
+            alert("请先登录!")
+        }else if(val == "err"){
+            alert($("#loginMsg").text())
+        }
+        getQutos();
+    });
 
+    function getQutos() {
+        $.ajax({
+            async:true,
+            url:"[[@{/getQuotes}]]",
+            type:"POST",
+            success:function(data){
+                $("#quotesAuthor").html(data.quotes.quotesAuthor)
+                $("#quotesContent").html(data.quotes.quotesContent)
+            }
+        })
+    }
+
+    $(document).ready(function() {
+        $('#registerForm').bootstrapValidator({
+//        live: 'disabled',
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                userName: {
+                    message: 'The username is not valid',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '用户名长度为6-30位'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_\.]+$/,
+                            message: '用户名由字母、数字、下划线组成'
+                        },
+                        threshold :  6 , //有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+                        remote: {
+                            url: 'validateUserName',
+                            message: '该用户名已被注册',
+                            delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+                        },
+                        different: {
+                            field: 'password',
+                            message: '用户名和密码不能相同'
+                        }
+                    }
+                },
+                email: {
+                    validators: {
+                        emailAddress: {
+                            message: '不是有效的电子邮件地址'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        identical: {
+                            field: 'conformPassword',
+                            message: '两次输入的密码不一致'
+                        },
+                        different: {
+                            field: 'userName',
+                            message: '用户名和密码不能相同'
+                        }
+                    }
+                },
+                conformPassword: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        identical: {
+                            field: 'password',
+                            message: '两次输入的密码不一致'
+                        },
+                        different: {
+                            field: 'userName',
+                            message: '用户名和密码不能相同'
+                        }
+                    }
+                }
+            }
+        });
+    });
+    $('#validateBtn').click(function() {
+        var validate= $('#registerForm').data('bootstrapValidator').validate();
+        console.log("验证:"+validate.isValid())
+        if(validate.isValid()){
+            $.ajax({
+                async:true,
+                url:"[[@{/register}]]",
+                type:"POST",
+                data: $('#registerForm').serialize(),
+                success:function(data){
+                    $('#register').modal('hide')
+                    alert("用户名["+data.registerMsg.userName+"]注册成功!")
+                },
+                error:function () {
+                    alert("注册失败!")
+                }
+            })
+        }else{
+            alert("请按要求填写相关信息!")
+            return false;
+        }
+    });
+</script>
 </html>

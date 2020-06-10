@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.notes.dao.CommentDao">
+    <resultMap id="BaseResultMap" type="com.blog.notes.entity.Comment">
+        <result column="commentId" property="commentId" />
+        <result column="currUserId" property="currUserId" />
+        <result column="commentUserId" property="commentUserId"/>
+        <result column="essaysId" property="essaysId"/>
+        <result column="comment" property="comment"/>
+    </resultMap>
+    <parameterMap id="Comment" type="com.blog.notes.entity.Comment"/>
+    <sql id="Base_Column_List">
+        commentId,currUserId,commentUserId,essaysId,comment;
+    </sql>
+
+    <resultMap type="com.blog.notes.entity.Comment" id="comment">
+        <result column="commentId" property="commentId" />
+        <result column="currUserId" property="currUserId" />
+        <result column="commentUserId" property="commentUserId"/>
+        <result column="essaysId" property="essaysId"/>
+        <result column="comment" property="comment"/>
+        <result column="createTime" property="createTime"/>
+        <association property="user" javaType="com.blog.notes.entity.User">
+            <result column="userId" property="userId" />
+            <result column="userName" property="userName" />
+        </association>
+    </resultMap>
+    <select id="findCommentByEssaysId" resultMap="comment">
+      SELECT nc.commentId,nu.userId,nu.userName,nc.essaysId,nc.`comment`,nc.createTime
+      FROM `notes_comment` nc
+      LEFT JOIN notes_user nu ON nc.currUserId=nu.userId
+      where essaysId=#{essaysId} order by createTime desc
+    </select>
+
+    <insert id="addComment" parameterType="com.blog.notes.entity.Comment">
+        insert into
+         `notes_comment` (currUserId, commentUserId,essaysId,comment,createTime)
+        values (#{currUserId},#{commentUserId},#{essaysId},#{comment},#{createTime})
+    </insert>
+
+    <delete id="deleteCommentByEssaysId">
+        delete from notes_comment where essaysId=#{essaysId};
+    </delete>
+
+</mapper>

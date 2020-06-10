@@ -3,39 +3,79 @@
 <mapper namespace="com.blog.notes.dao.EssaysDao">
     <resultMap id="BaseResultMap" type="com.blog.notes.entity.Essays">
         <result column="essaysId" property="essaysId" />
-        <result column="userId" property="userId" />
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
         <result column="essaysTitle" property="essaysTitle"/>
         <result column="essaysContent" property="essaysContent"/>
         <result column="createTime" property="createTime"/>
+        <result column="checkPermissions" property="checkPermissions"/>
+        <result column="praise" property="praise"/>
     </resultMap>
     <parameterMap id="Essays" type="com.blog.notes.entity.Essays"/>
     <sql id="Base_Column_List">
-        essaysId,userId, essaysTitle,essaysContent,createTime
+        essaysId,userId, essaysTitle,essaysContent,createTime,checkPermissions
     </sql>
 
     <insert id="addEssays" parameterType="com.blog.notes.entity.Essays">
       insert into
-        notes_essays (userId, essaysTitle,essaysContent,createTime)
-      values (#{userId},#{essaysTitle},#{essaysContent},#{createTime})
+        notes_essays (userId, essaysTitle,essaysContent,createTime,checkPermissions)
+      values (#{userId},#{essaysTitle},#{essaysContent},#{createTime},#{checkPermissions})
     </insert>
 
     <select id="findAllEssaysLimit" resultType="com.blog.notes.entity.Essays">
-        select * from notes_essays where userId=#{userId} limit 10;
+        select * from notes_essays where userId=#{userId} order by createTime desc limit 10;
     </select>
 
     <!-- 查询分页数据 -->
     <select id="findAllEssays" resultType="com.blog.notes.entity.Essays">
-        select * from notes_essays where userId=#{userId} limit #{offSet},#{pageSize};
+        select * from notes_essays
+        <if test="userId!=null">
+            where userId=#{userId} limit #{offSet},#{pageSize};
+        </if>
+        <if test="userId==null">
+            order by `praise` desc limit #{offSet},#{pageSize};
+        </if>
+
     </select>
 
     <!-- 查询总记录数 -->
     <select id="count" resultType="int">
-        SELECT count(*) FROM notes_essays where userId=#{userId}
+        SELECT count(*) FROM notes_essays
+        <if test="userId!=null">
+            where userId=#{userId}
+        </if>
     </select>
 
-    <select id="findEssaysById" resultType="com.blog.notes.entity.Essays">
+
+    <select id="findEssaysByEssaysId" resultType="com.blog.notes.entity.Essays">
         select * from notes_essays where essaysId=#{essaysId};
     </select>
 
+    <delete id="deleteEssaysByEssaysId">
+        delete from notes_essays where essaysId=#{essaysId};
+    </delete>
+
+    <!--分页搜索-->
+    <select id="findEssaysBySearchName" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays where checkPermissions=2 AND essaysTitle like "%"#{searchName}"%"
+        <if test="userId!=null">
+            union
+            SELECT * FROM `notes_essays`
+            WHERE userId=#{userId} and checkPermissions =1
+            AND essaysTitle like "%"#{searchName}"%"
+        </if>
+    </select>
+
+    <update id="updateEssaysByEssaysId" parameterType="com.blog.notes.entity.Essays">
+        update `notes_essays`
+        set essaysContent=#{essaysContent},checkPermissions=#{checkPermissions}
+        where essaysId=#{essaysId}
+    </update>
+
+    <!--点赞-->
+    <update id="addEssaysLike" parameterType="com.blog.notes.entity.Essays">
+        update `notes_essays`
+        set praise=praise+1
+        where essaysId=#{essaysId}
+    </update>
 
 </mapper>

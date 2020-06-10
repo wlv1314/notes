@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/common :: common_head('myNotes')">
+</head>
+<body>
+<div class="row">
+    <div class="col-md-1"><span id="userStatus" style="display: none;" th:if="${currUser!=null}" th:text="${currUser.userName}">${currUser.userName}</span></div>
+    <div class="col-md-10">
+        <div th:replace="common/head :: head_nav"></div>
+        <div class="row">
+            <div class="col-md-12">
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="page-header">
+                                <div class="form-group">
+                                    <label for="essaysTitle">标题</label>
+                                    <input type="text" class="form-control" name="essaysTitle" id="essaysTitle" th:value="${ebei.essaysTitle}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>随笔</label>
+                                <textarea class="form-control" name="essaysContent" rows="15" style="resize: none" th:text="${ebei.essaysContent}" readonly></textarea>
+                            </div>
+                            <div id="radio" class="form-group">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="checkPermissions" id="optionsRadios1" th:value="${ebei.checkPermissions}" disabled>
+                                        仅自己可见
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="checkPermissions" id="optionsRadios2" value="2" disabled>
+                                        所有人可见
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><a href="javascript:history.go(-1)" class="btn btn-primary active" role="button">返回</a></label>
+                                <label class="labelTip"><a id="deleteBtn" href="javascript:void(0)" th:onclick="|javascript : deleteEssays( '${ebei.essaysId }' )|" class="btn btn-primary btn-danger active" role="button">删除</a></label>
+                                <label class="labelEdit"><a id="editBtn" href="javascript:void(0)" th:onclick="|javascript : editEssays( '${ebei.essaysId }' )|" class="btn btn-primary btn-success active" role="button">编辑</a></label>
+                                <label><a href="javascript:void(0)" th:onclick="|javascript : comments( '${ebei.essaysId }' )|" class="btn btn-primary btn-info active" role="button">查看评论</a></label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<button id="addEsayssBtn" class="btn btn-default">提交</button>-->
+                <!--</form>-->
+            </div>
+        </div>
+        <div id="commentDiv" class="hidden">
+            <div>
+                <form id="commentForm" action="##" onsubmit="return false"  method="post">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <div class="input-group">
+                                <input type="text" name="comment" class="form-control" placeholder="评论内容...">
+                                <input type="text" name="currUserId" class="form-control hidden" th:if="${currUser!=null}" th:value="${currUser.userId}">
+                                <input type="text" name="commentUserId" class="form-control hidden" th:value="${ebei.userId}">
+                                <input type="text" name="essaysId" class="form-control hidden" th:value="${ebei.essaysId}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" id="commentBtn">提交评论</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <hr>
+            <div id="comment">
+                <div class="jumbotron">
+                    <div class="media-body">
+                        <h4 class="media-heading">登录后才能评论...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+</body>
+<script>
+
+    $(function () {
+        var value = $("#optionsRadios1").val();
+        if(value==2){
+            $('input:radio:last').attr('checked', 'checked');
+        }else{
+            $('input:radio:first').attr("checked",'checked')
+        }
+
+        var val = $("#userStatus").val();
+        if(val==null){
+            $("#radio").css("display","none");
+            $("#editBtn").css("display","none");
+            $("#deleteBtn").css("display","none");
+            $(".labelTip").attr("data-toggle","top");
+            $(".labelTip").attr("title","您不能删除他人作品");
+        }else{
+            var currUserId = document.getElementsByName("currUserId")[0].value;
+            var commentUserId = document.getElementsByName("commentUserId")[0].value;
+            if(currUserId!=commentUserId){
+                $("#radio").css("display","none");
+                $("#editBtn").css("display","none");
+                $("#deleteBtn").css("display","none");
+                $(".labelTip").attr("data-toggle","top");
+                $(".labelTip").attr("title","您不能删除他人作品");
+            }
+        }
+    })
+
+    function deleteEssays(essaysId) {
+        var isdel=window.confirm("确定要删除吗?")
+        if(isdel){
+            var val = $("#userStatus").val();
+            if(val==null){
+                alert("请先登录!")
+                return;
+            }
+            var currUserId = document.getElementsByName("currUserId")[0];
+            var commentUserId = document.getElementsByName("commentUserId")[0];
+            if(currUserId!=commentUserId){
+                alert("很抱歉,您不能删除他人作品!")
+                return;
+            }
+            $.ajax({
+                async:true,
+                url:"[[@{/deleteEssaysById/}]]"+essaysId,
+                type:"POST",
+                success:function(data){
+                    alert("删除成功!");
+                    window.location.href="/notes/myEssays"
+                }
+            })
+        }
+    }
+
+    //编辑
+    function editEssays(essaysId) {
+        var text = $("#editBtn").text();
+        if(text == '编辑'){
+            $("textarea").removeAttr("readonly");
+            $("#optionsRadios1").removeAttr("disabled");
+            $("#optionsRadios2").removeAttr("disabled");
+            $("#editBtn").text("提交")
+        }else{
+            //提交
+            var permissions = $("input[type='radio']:checked").val();
+            // var val = $('input[type=radio][name=checkPermissions]:checked').val();
+            var content = $("textarea").text();
+            var essaysData = {'essaysId':essaysId,'essaysContent':content,'checkPermissions':permissions};
+            $.ajax({
+                async:true,
+                data:essaysData,
+                url:"[[@{/updateEssays}]]",
+                type:"POST",
+                success:function(data){
+                    alert(data.msg);
+                    $("textarea").text(content);
+                    if(permissions==1){
+                        $('input:radio:first').attr('checked', 'checked');
+                    }else{
+                        $('input:radio:last').attr('checked', 'checked');
+                    }
+                    if(text == '提交'){
+                        $("#editBtn").text("编辑")
+                        $("textarea").attr("readonly","readonly");
+                        $("#optionsRadios1").attr("disabled","disabled");
+                        $("#optionsRadios2").attr("disabled","disabled");
+                    }
+                },
+                error:function () {
+                    alert("修改异常!")
+                }
+            })
+        }
+
+    }
+
+    //评论
+    function comments(essaysId) {
+        var val = $("#userStatus").val();
+        if(val==null){
+            alert("登录后才能评论!")
+        }else{
+            $("#commentDiv").attr("class","show");
+            $.ajax({
+                async:true,
+                url:"[[@{/comments/}]]"+essaysId,
+                type:"POST",
+                success:function(data){
+                    var content="";
+                    console.log(data.comments)
+                    //外层循环所有的对象，内层循环每个对象的属性
+                    for(var i = 0;i < data.comments.length;i++){
+                        content += "<small>用户名:<i class=\"text-primary\">"+data.comments[i].user.userName+"</i></small>";
+                        content += "</br><small class=\"bg-info\">"+data.comments[i].comment+"</small>";
+                        content += "</br><i>"+data.comments[i].createTime+"</i><hr>";
+                    }
+                    if(content==""){
+                        content+="<h3>暂时还没有评论...</h3>"
+                    }
+                    $(".jumbotron").html(content);
+                }
+            })
+        }
+    }
+
+    $("#commentBtn").click(function () {
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            url:"[[@{/addComment}]]",
+            data: $('#commentForm').serialize(),
+            success: function (data) {
+                console.log(data);//打印服务端返回的数据(调试用)
+                alert(data.msg);
+                var essaysId = document.getElementsByName("essaysId");
+                comments(essaysId[0].value);
+                document.getElementsByName("comment")[0].value="";
+            },
+            error : function(result) {
+                alert("系统异常！"+result);
+            }
+        });
+    })
+
+</script>
+
+
+</html>

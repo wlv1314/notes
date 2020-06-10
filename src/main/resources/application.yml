@@ -3,6 +3,8 @@ server:
   port: 8083
   servlet:
     context-path: /notes
+  max-http-header-size: 1024000
+
 spring:
   mvc:
     view:
@@ -16,6 +18,12 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
+  mail:
+    host: smtp.qq.com
+    username: 1245080925@qq.com
+    password: mbcwcrnvzaqhfjca
+    default-encoding: UTF-8
+  
 
 #配置mybatis框架
 mybatis:
@@ -23,3 +31,6 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   #定义实体类位置
   type-aliases-package: com.blog.notes.entity
+
+#邮件发送方
+from-mail-addr: 1245080925@qq.com

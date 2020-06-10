@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="col-md-10">
-                <form id="addEssaysForm" role="form">
+                <form id="addEssaysForm" role="form" onsubmit="return false" action="##" method="post">
                     <div class="media">
                         <div class="media-body">
                             <input style="display: none;" type="text" name="userId" th:value="${currUser.userId}">
@@ -30,6 +30,18 @@
                             <div class="form-group">
                                 <label>随笔</label>
                                 <textarea class="form-control" name="essaysContent" rows="15" style="resize: none"></textarea>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="checkPermissions" id="optionsRadios1" value="1" checked>
+                                    仅自己可见
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="checkPermissions" id="optionsRadios2" value="2">
+                                    所有人可见
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -47,7 +59,6 @@
 <script>
 $("#addEsayssBtn").click(function () {
     $.ajax({
-        async:"true",
         type:"POST",
         dataType:"json",
         url:"addessays",
@@ -55,6 +66,7 @@ $("#addEsayssBtn").click(function () {
         success: function (data) {
             console.log(data);//打印服务端返回的数据(调试用)
             alert(data.msg);
+            window.location.reload()
 
         },
         error : function(result) {

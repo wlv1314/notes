@@ -4,13 +4,21 @@
 <div th:fragment="head_nav" style="margin-bottom: 0px;">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle = "collapse"  data-target = "#bs-example-navbar-collapse-1">
+                <span class="sr-only">qieh</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="#">首页</a></li>
+                <li><a th:href="@{/index}">首页</a></li>
                 <li><a href="#">资源 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">精选</a></li>
-                <li><a href="essays">写随笔</a></li>
-                <li><a href="myEssays">我的随笔</a></li>
+                <li><a th:href="@{/choiceness}">精选</a></li>
+                <li><a th:href="@{/essays}">写随笔</a></li>
+                <li><a th:href="@{/myEssays}">我的随笔</a></li>
                 <!--<li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -19,9 +27,10 @@
                     </ul>
                 </li>-->
             </ul>
-            <form class="navbar-form navbar-left">
+            <form class="navbar-form navbar-left" th:action="@{/search}">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <!--此处报错没问题-->
+                    <input type="text" name="searchName" class="form-control" placeholder="Search" th:value="${searchName}">
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
@@ -56,7 +65,7 @@
                 <h1 class="text-center">注册</h1>
             </div>
             <div class="modal-body">
-                <form class="form-group" action="register" method="post">
+                <form id="registerForm" class="form-group" role="form" onsubmit="return false" action="##" method="post">
                     <div class="form-group">
                         <label>用户名</label>
                         <input class="form-control" name="userName" type="text" placeholder="6-15位字母或数字">
@@ -74,7 +83,7 @@
                         <input class="form-control" name="email" type="email" placeholder="例如:123@123.com">
                     </div>
                     <div class="text-right">
-                        <button class="btn btn-primary" type="submit">提交</button>
+                        <button class="btn btn-primary" id="validateBtn">提交</button>
                         <button class="btn btn-danger" data-dismiss="modal">取消</button>
                     </div>
                     <a href="" data-toggle="modal" data-dismiss="modal" data-target="#login">已有账号？点我登录</a>
@@ -96,7 +105,7 @@
                 <h1 class="text-center">登录</h1>
             </div>
             <div class="modal-body">
-                <form class="form-group" action="login" method="post">
+                <form class="form-group" th:action="@{/login}" method="post">
                     <div class="form-group">
                         <label>用户名</label>
                         <input class="form-control" name="userName" type="text" placeholder="">

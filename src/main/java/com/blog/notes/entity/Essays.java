@@ -11,10 +11,13 @@ import lombok.Data;
 @Data
 public class Essays {
     private int essaysId;
-    private int userId;
+    private Integer userId;
     private String essaysTitle;
     private String essaysContent;
     private String createTime;
+    private Integer checkPermissions;
+    private Integer praise;
+
 
 
 }
