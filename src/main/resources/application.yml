@@ -6,6 +6,8 @@ server:
   max-http-header-size: 1024000
 
 spring:
+  profiles:
+    active: javamelody
   mvc:
     view:
       prefix: classpath:/templates/
