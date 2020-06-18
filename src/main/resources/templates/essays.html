@@ -29,7 +29,10 @@
                             </div>
                             <div class="form-group">
                                 <label>随笔</label>
-                                <textarea class="form-control" name="essaysContent" rows="15" style="resize: none"></textarea>
+                                <textarea id="editor" class="form-control" name="essaysContent" rows="15" style="resize: none"></textarea>
+                                <script>
+                                    CKEDITOR.replace( 'editor',{height: '300px'} );
+                                </script>
                             </div>
                             <div class="radio">
                                 <label>
@@ -57,7 +60,13 @@
 </div>
 </body>
 <script>
+    //处理CKEDITOR的值
+    function CKupdate() {
+        for (instance in CKEDITOR.instances)
+            CKEDITOR.instances[instance].updateElement();
+    }
 $("#addEsayssBtn").click(function () {
+    CKupdate();
     $.ajax({
         type:"POST",
         dataType:"json",

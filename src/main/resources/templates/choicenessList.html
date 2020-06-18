@@ -74,7 +74,7 @@
             var tableShow = '<table class="table table-hover" style="table-layout: fixed;">';
             for (var i = 0; i < list.length; i++) {
                 tableShow += '<tr"><td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap">';
-                tableShow += '<a href="news/' + list[i].essaysId + '/'+currPage+'">' + list[i].essaysContent + '</a></td>';
+                tableShow += '<a href="news/' + list[i].essaysId + '/'+currPage+'">' + list[i].essaysContent.replace(/<[^>]+>/g,"") + '</a></td>';
                 tableShow += '<td class="tdid" style="display: none;">'+list[i].userId+'</td><td style="width: 14%">';
                 tableShow += '<a href="javascript:void(0);" onclick="reflashLike(' + list[i].essaysId + ')" title="点赞"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true">喜欢&nbsp;</span></a>';
                 tableShow += '<i id="i'+list[i].essaysId+'">'+list[i].praise+'</i>&nbsp;<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></td></tr>'

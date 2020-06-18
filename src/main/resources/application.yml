@@ -7,7 +7,7 @@ server:
 
 spring:
   profiles:
-    active: javamelody
+    active: javamelody,fastdfs
   mvc:
     view:
       prefix: classpath:/templates/
@@ -25,7 +25,11 @@ spring:
     username: 1245080925@qq.com
     password: fygvqjeczupnicgf
     default-encoding: UTF-8
-  
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
 
 #配置mybatis框架
 mybatis:

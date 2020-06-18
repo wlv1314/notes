@@ -78,7 +78,7 @@
                 tableShow += '</div><div class=" am-u-sm-7 am-list-main">';
                 tableShow += '<h3 class="am-list-item-hd">' + list[i].essaysTitle + '</h3>';
                 tableShow += '</div><div class="newsico am-fr">';
-                tableShow += '<i class="am-icon-clock-o  am-hide-sm-only">' + list[i].essaysContent.substring(1,100) + '</i></div></a>';
+                tableShow += '<i class="am-icon-clock-o  am-hide-sm-only">' + list[i].essaysContent.replace(/<[^>]+>/g,"").substring(1,100) + '</i></div></a>';
                 tableShow += '<i>'+list[i].createTime+'</i><hr>';
             }
             $('#htmlDiv').html(tableShow)

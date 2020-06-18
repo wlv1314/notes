@@ -19,8 +19,8 @@
                 <tr th:each="info : ${list}" >
                     <td th:text="${info.essaysTitle}"></td>
                     <td th:switch="${#strings.length(info.essaysContent) gt 50}">
-                        <i th:case="true" th:text="${#strings.substring(info.essaysContent,0,50)}"></i>
-                        <i th:case="false" th:text="${info.essaysContent}"></i>
+                        <i th:case="true" th:text="${#strings.substring(info.essaysContent.replace(/<[^>]+>/g,''),0,50)}"></i>
+                        <i th:case="false" th:text="${info.essaysContent.replace(/<[^>]+>/g,'')}"></i>
                     </td>
                     <td width="170px" th:text="${info.createTime}"></td>
                     <td>
