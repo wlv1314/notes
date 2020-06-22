@@ -19,7 +19,7 @@
                         </div>
                         <div class="form-group">
                             <label>随笔</label>
-                            <textarea class="form-control" name="essaysContent" rows="15" style="resize: none" th:text="${ebei.essaysContent}" readonly></textarea>
+                            <textarea id="essaysContent" class="form-control" name="essaysContent" rows="15" style="resize: none" th:utext="${ebei.essaysContent}" ></textarea>
                         </div>
                         <div id="radio" class="form-group">
                             <div class="radio">
@@ -79,8 +79,20 @@
 </div>
 </body>
 <script>
-
-    $(function () {
+    var editor ;
+        $(function () {
+        CKEDITOR.replace( 'essaysContent',{height: '450px'} );
+        //编辑 到 只读
+        editor = CKEDITOR.instances.essaysContent;
+        console.log(editor)
+        if(editor.readOnly){
+            editor.setReadOnly(true);
+        } else {
+            CKEDITOR.on('instanceReady', function (e) {
+                e.editor.setReadOnly(true);
+            });
+        }
+        // editor.setReadOnly(true);//设置只读
         var value = $("#optionsRadios1").val();
         if(value==2){
             $('input:radio:last').attr('checked', 'checked');
@@ -138,6 +150,13 @@
     function editEssays(essaysId) {
         var text = $("#editBtn").text();
         if(text == '编辑'){
+            if (editor.readOnly) {
+                editor.setReadOnly(false);
+            } else {
+                CKEDITOR.on('instanceReady', function (e) {
+                    e.editor.setReadOnly(false);
+                });
+            }
             $("textarea").removeAttr("readonly");
             $("#optionsRadios1").removeAttr("disabled");
             $("#optionsRadios2").removeAttr("disabled");
@@ -146,7 +165,7 @@
             //提交
             var permissions = $("input[type='radio']:checked").val();
             // var val = $('input[type=radio][name=checkPermissions]:checked').val();
-            var content = $("textarea").text();
+            var content = CKEDITOR.instances.essaysContent.getData();
             var essaysData = {'essaysId':essaysId,'essaysContent':content,'checkPermissions':permissions};
             $.ajax({
                 async:true,
@@ -174,6 +193,12 @@
             })
         }
 
+    }
+
+    //处理CKEDITOR的值
+    function CKupdate() {
+        for (instance in CKEDITOR.instances)
+            CKEDITOR.instances[instance].updateElement();
     }
 
     //评论
