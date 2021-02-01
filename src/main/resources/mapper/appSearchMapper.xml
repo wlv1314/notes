@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.applet.dao.SearchDao">
+    <resultMap id="BaseResultMap" type="com.blog.notes.entity.Essays">
+        <result column="essaysId" property="essaysId" />
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="essaysTitle" property="essaysTitle"/>
+        <result column="essaysContent" property="essaysContent"/>
+        <result column="createTime" property="createTime"/>
+        <result column="checkPermissions" property="checkPermissions"/>
+        <result column="praise" property="praise"/>
+        <result column="userImg" property="userImg"/>
+    </resultMap>
+
+    <!--小程序搜索-->
+    <select id="searchAppEssays" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays
+        where checkPermissions=2 AND
+        essaysTitle like "%"#{searchKey}"%"
+        order by `praise`,'createTime' desc limit #{offSet},#{pageSize};
+
+    </select>
+    <!--小程序搜索-->
+    <select id="searchAppEssaysCount" resultType="int">
+        select count(*) from notes_essays
+        where checkPermissions=2 AND
+        essaysTitle like "%"#{searchKey}"%"
+    </select>
+</mapper>

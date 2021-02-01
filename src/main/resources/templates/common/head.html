@@ -15,17 +15,19 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a th:href="@{/index}">首页</a></li>
-                <li><a href="#">资源 <span class="sr-only">(current)</span></a></li>
+                <!--<li><a th:href="@{/pictures}">图片 <span class="sr-only">(current)</span></a></li>-->
+                <li class="dropdown">
+                    <a th:href="@{/pictures}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">图片<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a th:href="@{'/pictures?type='+scenery}">风景</a></li>
+                        <li><a th:href="@{'/pictures?type='+flowers}">花卉</a></li>
+                        <li><a th:href="@{'/pictures?type='+looker}">美女</a></li>
+                        <li><a th:href="@{'/pictures?type='+cartoon}">动漫</a></li>
+                    </ul>
+                </li>
                 <li><a th:href="@{/choiceness}">精选</a></li>
                 <li><a th:href="@{/essays}">写随笔</a></li>
                 <li><a th:href="@{/myEssays}">我的随笔</a></li>
-                <!--<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">介绍</a></li>
-                        <li><a href="#">留言</a></li>
-                    </ul>
-                </li>-->
             </ul>
             <form class="navbar-form navbar-left" th:action="@{/search}">
                 <div class="form-group">

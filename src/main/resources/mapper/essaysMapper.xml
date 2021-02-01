@@ -9,16 +9,17 @@
         <result column="createTime" property="createTime"/>
         <result column="checkPermissions" property="checkPermissions"/>
         <result column="praise" property="praise"/>
+        <result column="userImg" property="userImg"/>
     </resultMap>
     <parameterMap id="Essays" type="com.blog.notes.entity.Essays"/>
     <sql id="Base_Column_List">
-        essaysId,userId, essaysTitle,essaysContent,createTime,checkPermissions
+        essaysId,userId, essaysTitle,essaysContent,createTime,checkPermissions,userImg
     </sql>
 
     <insert id="addEssays" parameterType="com.blog.notes.entity.Essays">
       insert into
-        notes_essays (userId, essaysTitle,essaysContent,createTime,checkPermissions)
-      values (#{userId},#{essaysTitle},#{essaysContent},#{createTime},#{checkPermissions})
+        notes_essays (userId, essaysTitle,essaysContent,createTime,checkPermissions,userImg)
+      values (#{userId},#{essaysTitle},#{essaysContent},#{createTime},#{checkPermissions},#{userImg})
     </insert>
 
     <select id="findAllEssaysLimit" resultType="com.blog.notes.entity.Essays">
@@ -32,7 +33,7 @@
             where userId=#{userId} limit #{offSet},#{pageSize};
         </if>
         <if test="userId==null">
-            order by `praise` desc limit #{offSet},#{pageSize};
+            where checkPermissions=2 order by `praise`,'createTime' desc limit #{offSet},#{pageSize};
         </if>
 
     </select>
@@ -42,6 +43,9 @@
         SELECT count(*) FROM notes_essays
         <if test="userId!=null">
             where userId=#{userId}
+        </if>
+        <if test="userId==null">
+            where checkPermissions=2
         </if>
     </select>
 
@@ -78,4 +82,12 @@
         where essaysId=#{essaysId}
     </update>
 
+    <!--小程序搜索-->
+    <select id="searchAppEssays" resultType="com.blog.notes.entity.Essays">
+        select * from notes_essays
+        where checkPermissions=2 AND
+        essaysTitle like "%"#{searchKey}"%"
+--         order by `praise`,'createTime' desc limit #{offSet},#{pageSize};
+
+    </select>
 </mapper>

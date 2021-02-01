@@ -29,7 +29,12 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
-
+  data:
+    mongodb:
+      crawler:
+        host: 127.0.0.1
+        port: 27017
+        database: crawler
 
 #配置mybatis框架
 mybatis:

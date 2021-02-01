@@ -165,5 +165,18 @@ public class HomePageController {
             return "choicenessList";
         }
     }
+    @RequestMapping("pictures")
+    public String pictures(HttpServletRequest request,String type) throws IOException {
+//        Object loginUser = request.getSession().getAttribute("currUser");
+//        if(loginUser==null){
+//            attributes.addFlashAttribute("loginStatus", false);
+//            return "redirect:index";
+//        }else{
+//            request.setAttribute("currUser", loginUser);
+//        }
+        System.out.println("页面跳转图片类型:"+type);
+        request.setAttribute("type", type);
+        return "pictureList";
+    }
 
 }

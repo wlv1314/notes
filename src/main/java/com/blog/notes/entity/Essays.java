@@ -17,6 +17,7 @@ public class Essays {
     private String createTime;
     private Integer checkPermissions;
     private Integer praise;
+    private String userImg;
 
 
 

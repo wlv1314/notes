@@ -22,5 +22,13 @@
         select * from notes_user where userName=#{userName}
     </select>
 
+    <insert id="batchInsert">
+        insert into notes_user(userName,password,email)
+        values
+        <foreach collection="list" item="emp" separator=",">
+            (#{emp.userName},#{emp.password},#{emp.email})
+        </foreach>
+    </insert>
+
 
 </mapper>

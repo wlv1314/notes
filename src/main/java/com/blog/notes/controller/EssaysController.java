@@ -64,10 +64,13 @@ public class EssaysController {
 
     @PostMapping("essaysList")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> news(@RequestParam("currPage")int currPage, HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> news(@RequestParam(value = "currPage",defaultValue = "1")int currPage, HttpServletRequest request) {
         User currUser = (User) request.getSession().getAttribute("currUser");
+        currUser=new User();
+        currUser.setUserId(3);
         Map<String, Object> map = new HashMap<String, Object>();
         if(currUser==null){
+            System.out.println("验证登录为空");
             map.put("msg", "login please!!!");
             return new ResponseEntity<Map<String, Object>>(
                     HttpStatus.INTERNAL_SERVER_ERROR);
@@ -77,7 +80,7 @@ public class EssaysController {
 
         try {
             int count = essaysService.count(currUser.getUserId());// 获取总条目数
-            int totalPage = count / pageSize;// 计算总页数
+            int totalPage = count / pageSize;// 计算总页数x
             if (count % pageSize != 0) {// 不满一页的数据按一页计算
                 totalPage++;
             }

@@ -100,6 +100,7 @@
         }else if(val == "err"){
             alert($("#loginMsg").text())
         }
+        getLUNBOPic();
         getQutos();
     });
 
@@ -111,6 +112,46 @@
             success:function(data){
                 $("#quotesAuthor").html(data.quotes.quotesAuthor)
                 $("#quotesContent").html(data.quotes.quotesContent)
+            }
+        })
+    }
+
+    /**
+     * 获取轮播图
+     */
+    function getLUNBOPic() {
+        $.ajax({
+            async:true,
+            url:"[[@{/getPics}]]",
+            type:"POST",
+            success:function(data){
+                var carouselHtml="<ol class=\"carousel-indicators\">";
+                var carouselPic="<div class=\"carousel-inner\" style=\"text-align:center\">";
+                for (var i = 0; i < data.data.length; i++) {
+                    console.log(data.data[i].src)
+                    if(0==i){
+                        carouselHtml+="<li class=\"active\" data-target=\"#slidershow\" data-slide-to="+i+"></li>";
+                        carouselPic+="<div class=\"item active\">";
+                    }else{
+                        carouselHtml+="<li data-target=\"#slidershow\" data-slide-to="+i+"></li>";
+                        carouselPic+="<div class=\"item\">";
+                    }
+                    carouselPic+="<a href=\"##\"><img src="+data.data[i].src+" alt=\"\"  style=\"width: 1100px;height: 500px;\"></a>";
+                    carouselPic+="<div class=\"carousel-caption\">\n" +
+                        "                    <p>"+data.data[i].alt+"</p>\n" +
+                        "                    </div>\n" +
+                        "                    </div>";
+
+                }
+                carouselHtml+="</ol>";
+                carouselPic+="<a class=\"left carousel-control\" href=\"#slidershow\" data-slide=\"prev\">\n" +
+                    "                <span class=\"glyphicon glyphicon-chevron-left\"></span>\n" +
+                    "            </a>\n" +
+                    "            <a class=\"right carousel-control\" href=\"#slidershow\" data-slide=\"next\">\n" +
+                    "                <span class=\"glyphicon glyphicon-chevron-right\"></span>\n" +
+                    "            </a></div>";
+                $("#slidershow").empty();
+                $("#slidershow").html(carouselHtml+carouselPic)
             }
         })
     }
