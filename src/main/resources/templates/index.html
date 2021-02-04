@@ -136,7 +136,7 @@
                         carouselHtml+="<li data-target=\"#slidershow\" data-slide-to="+i+"></li>";
                         carouselPic+="<div class=\"item\">";
                     }
-                    carouselPic+="<a href=\"##\"><img src="+data.data[i].src+" alt=\"\"  style=\"width: 1100px;height: 500px;\"></a>";
+                    carouselPic+="<a href=\"##\"><img src="+data.data[i].site+" alt=\"\"  style=\"width: 1100px;height: 500px;\"></a>";
                     carouselPic+="<div class=\"carousel-caption\">\n" +
                         "                    <p>"+data.data[i].alt+"</p>\n" +
                         "                    </div>\n" +
@@ -144,12 +144,12 @@
 
                 }
                 carouselHtml+="</ol>";
-                carouselPic+="<a class=\"left carousel-control\" href=\"#slidershow\" data-slide=\"prev\">\n" +
+                carouselPic+="</div><a class=\"left carousel-control\" href=\"#slidershow\" data-slide=\"prev\">\n" +
                     "                <span class=\"glyphicon glyphicon-chevron-left\"></span>\n" +
                     "            </a>\n" +
                     "            <a class=\"right carousel-control\" href=\"#slidershow\" data-slide=\"next\">\n" +
                     "                <span class=\"glyphicon glyphicon-chevron-right\"></span>\n" +
-                    "            </a></div>";
+                    "            </a>";
                 $("#slidershow").empty();
                 $("#slidershow").html(carouselHtml+carouselPic)
             }

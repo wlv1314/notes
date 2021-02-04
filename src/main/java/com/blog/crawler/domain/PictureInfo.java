@@ -14,13 +14,25 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class PictureInfo {
 
     private String id;
+    /**
+     * 原地址
+     */
     private String src;
     private String imgName;
     private String alt;
     private String title;
     private String info;
+    /**
+     * 位置
+     */
     private String site;
     private String md5;
     private String type;
+    private String createTime;
+    /**
+     * 0-删除
+     * 1-再用
+     */
+    private Integer state;
 
 }
